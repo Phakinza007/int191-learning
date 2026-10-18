@@ -4,12 +4,14 @@
 
 Standalone deployment of the INT191 learning module, reusing the existing Astro + React components and SQL simulation engine. This repository is independent of the original course website and its deployment.
 
-- Thai / English toggle; light / dark mode and three accent themes
+- Thai / English toggle; light / dark mode and Ocean, Forest and Graphite accent themes
 - Twelve independent lessons, interactive PK/FK tables, FD closure explorer and ER diagrams
 - JOB_SHEET: UNF → 1NF → 2NF → 3NF → BCNF, anomalies and a separate 3NF-not-BCNF counterexample
 - Twenty authored practice questions, progressive hints, timed practice and mistake review
 - Twelve SQL examples using a bounded educational simulation in a disposable browser Worker
 - Browser-local progress and bookmarks; no login or server database
+
+The independent INT191 interface includes a focused resume panel, direct laboratory shortcuts, an ordered learning path and collapsible mobile curriculum. Visual and product principles are documented in `DESIGN.md` and `PRODUCT.md`.
 
 ## Development
 

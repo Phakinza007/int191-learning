@@ -10,17 +10,19 @@ import '../styles/int191.css';
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="เรียนฐานข้อมูล INT191 แบบลงมือทำ: Normalization, JOB_SHEET, FD, ER Diagram, SQL และแบบฝึกหัด พร้อมภาษาไทยและ English" />
+  <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
   <title>INT191 · Interactive Database Lab</title>
   <script is:inline>
    (() => {
     const root = document.documentElement;
     let mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    let theme = 'lilac';
+    let theme = 'ocean';
     try {
      const savedMode = localStorage.getItem('int191-mode');
-     const savedTheme = localStorage.getItem('int191-theme');
+     const storedTheme = localStorage.getItem('int191-theme');
+     const savedTheme = ({lilac: 'ocean', sage: 'forest', mono: 'graphite'})[storedTheme] ?? storedTheme;
      if (savedMode === 'dark' || savedMode === 'light') mode = savedMode;
-     if (['lilac', 'sage', 'mono'].includes(savedTheme)) theme = savedTheme;
+     if (['ocean', 'forest', 'graphite'].includes(savedTheme)) theme = savedTheme;
     } catch {}
     root.dataset.mode = mode;
     root.dataset.theme = theme;
@@ -28,7 +30,11 @@ import '../styles/int191.css';
   </script>
  </head>
  <body>
-  <header class="site-bar"><a href={import.meta.env.BASE_URL}>INT191 · Database Lab</a><ThemeControls /></header>
+  <header class="site-bar"><div class="site-bar-inner">
+    <a class="site-brand" href={import.meta.env.BASE_URL}>
+     <svg width="34" height="36" viewBox="0 0 34 36" fill="none" aria-hidden="true"><rect x="1" y="1" width="22" height="14" rx="3" stroke="#99bdff" stroke-width="2"/><rect x="11" y="21" width="22" height="14" rx="3" stroke="#99bdff" stroke-width="2"/><path d="M12 15v12h-1M23 8h6v13" stroke="#f7b54d" stroke-width="2"/><circle cx="7" cy="8" r="2" fill="#f7b54d"/><circle cx="17" cy="28" r="2" fill="#f7b54d"/></svg>
+     <span><strong>INT191 <span aria-hidden="true">/</span> Database Lab</strong><small>Interactive database learning</small></span>
+    </a><ThemeControls /></div></header>
   <main><DatabaseAcademy initialLang="th" client:load /></main>
  </body>
 </html>

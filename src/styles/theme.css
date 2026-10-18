@@ -13,89 +13,137 @@
   font-weight: 600 900;
   font-display: swap;
 }
+/* Independent INT191 identity. Semantic roles are stable across accents. */
 :root {
   color-scheme: light;
   --font-sans: "LINE Seed Sans TH", system-ui, sans-serif;
-  --radius-card: 26px;
-  --color-page: #f6f7f9;
-  --color-surface: #fff;
-  --color-surface-2: #eff1f5;
-  --color-ink: #272b34;
-  --color-ink-2: #4c5361;
-  --color-muted: #69717e;
-  --color-border: #e4e7ed;
-  --color-border-2: #cdd2dd;
-  --color-ac-blue: #71558e;
+  --radius-card: 16px;
+  --color-page: oklch(0.97 0.007 250);
+  --color-surface: oklch(1 0 0);
+  --color-surface-2: oklch(0.95 0.012 250);
+  --color-ink: oklch(0.25 0.035 255);
+  --color-ink-2: oklch(0.4 0.035 250);
+  --color-muted: oklch(0.47 0.03 250);
+  --color-border: oklch(0.89 0.018 250);
+  --color-border-2: oklch(0.76 0.025 250);
+  --color-ac-blue: oklch(0.43 0.17 258);
   --color-ac-violet: var(--color-ac-blue);
-  --accent-soft: #eee8f6;
-  --accent-button: #e3d8ef;
-  --accent-button-ink: #453356;
-  --practice-current: #6845a0;
-  --practice-info: #216d9c;
-  --practice-success: #246c48;
-  --practice-hint: #895d1b;
-  --practice-error: #ae3c44;
+  --accent-soft: oklch(0.94 0.03 255);
+  --accent-button: oklch(0.43 0.17 258);
+  --accent-button-ink: oklch(1 0 0);
+  --brand-panel: oklch(0.34 0.11 257);
+  --brand-panel-ink: oklch(0.99 0.005 250);
+  --brand-panel-muted: oklch(0.87 0.035 255);
+  --brand-panel-border: oklch(0.55 0.08 255);
+  --action: oklch(0.85 0.16 65);
+  --action-ink: oklch(0.23 0.05 50);
+  --practice-current: oklch(0.43 0.17 258);
+  --practice-info: oklch(0.43 0.15 255);
+  --practice-success: oklch(0.4 0.1 160);
+  --practice-hint: oklch(0.44 0.1 55);
+  --practice-error: oklch(0.45 0.16 25);
 }
-:root[data-theme="sage"] {
-  --color-ac-blue: #416c53;
-  --accent-soft: #e8f1eb;
-  --accent-button: #dcece2;
-  --accent-button-ink: #294737;
+:root[data-theme="forest"] {
+  --color-ac-blue: oklch(0.39 0.09 165);
+  --accent-soft: oklch(0.94 0.025 165);
+  --accent-button: oklch(0.39 0.09 165);
+  --brand-panel: oklch(0.3 0.055 165);
+  --brand-panel-muted: oklch(0.88 0.025 165);
+  --brand-panel-border: oklch(0.53 0.04 165);
 }
-:root[data-theme="mono"] {
-  --color-ac-blue: #525b6b;
-  --accent-soft: #eceef2;
-  --accent-button: #e1e4e8;
-  --accent-button-ink: #30343c;
+:root[data-theme="graphite"] {
+  --color-ac-blue: oklch(0.38 0.02 255);
+  --accent-soft: oklch(0.94 0.005 255);
+  --accent-button: oklch(0.38 0.02 255);
+  --brand-panel: oklch(0.28 0.015 255);
+  --brand-panel-muted: oklch(0.87 0.01 255);
+  --brand-panel-border: oklch(0.53 0.015 255);
 }
 :root[data-mode="dark"] {
   color-scheme: dark;
-  --color-page: #17191d;
-  --color-surface: #22252b;
-  --color-surface-2: #2c3038;
-  --color-ink: #e9ebf0;
-  --color-ink-2: #ccd1db;
-  --color-muted: #b0b8c6;
-  --color-border: #353a44;
-  --color-border-2: #596170;
-  --color-ac-blue: #d5bdf0;
-  --color-ac-mint: #99ccac;
-  --color-ac-amber: #e6c484;
-  --color-ac-rose: #f3a6ac;
-  --color-ac-cyan: #9acfd7;
-  --accent-soft: #343045;
-  --accent-button: #dfd5f1;
-  --accent-button-ink: #30253f;
-  --practice-current: #c9adf4;
-  --practice-info: #8fc9ec;
-  --practice-success: #91d8ac;
-  --practice-hint: #f0ca82;
-  --practice-error: #f3a0a5;
+  --color-page: oklch(0.19 0.018 255);
+  --color-surface: oklch(0.235 0.02 255);
+  --color-surface-2: oklch(0.28 0.025 255);
+  --color-ink: oklch(0.95 0.01 250);
+  --color-ink-2: oklch(0.83 0.022 250);
+  --color-muted: oklch(0.73 0.025 250);
+  --color-border: oklch(0.35 0.025 255);
+  --color-border-2: oklch(0.5 0.03 255);
+  --color-ac-blue: oklch(0.79 0.105 250);
+  --accent-soft: oklch(0.31 0.06 255);
+  --accent-button: oklch(0.79 0.105 250);
+  --accent-button-ink: oklch(0.2 0.045 255);
+  --practice-current: oklch(0.79 0.105 250);
+  --practice-info: oklch(0.8 0.1 250);
+  --practice-success: oklch(0.81 0.11 160);
+  --practice-hint: oklch(0.85 0.12 70);
+  --practice-error: oklch(0.8 0.105 25);
 }
-:root[data-mode="dark"][data-theme="sage"] {
-  --color-ac-blue: #b7d9c5;
-  --accent-soft: #293b34;
-  --accent-button: #c4dfcf;
-  --accent-button-ink: #263d30;
+:root[data-mode="dark"][data-theme="forest"] {
+  --color-ac-blue: oklch(0.82 0.09 160);
+  --accent-soft: oklch(0.3 0.04 165);
+  --accent-button: oklch(0.82 0.09 160);
 }
-:root[data-mode="dark"][data-theme="mono"] {
-  --color-ac-blue: #d3d7df;
-  --accent-soft: #30343b;
-  --accent-button: #dce0e6;
-  --accent-button-ink: #292e36;
+:root[data-mode="dark"][data-theme="graphite"] {
+  --color-ac-blue: oklch(0.85 0.015 250);
+  --accent-soft: oklch(0.32 0.015 255);
+  --accent-button: oklch(0.85 0.015 250);
 }
-body, button, input, select, textarea { font-family: var(--font-sans); }
-pre, code, kbd, samp, textarea[spellcheck="false"] { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-::selection { background: var(--accent-button); color: var(--accent-button-ink); }
-button, select { cursor: pointer; }
-button:disabled, select:disabled { cursor: default; }
-.theme-controls { display:flex; align-items:center; gap:5px; flex-shrink:0; }
-.theme-controls select, .theme-controls button {
-  background:var(--color-surface); border:1px solid var(--color-border);
-  border-radius:999px; color:var(--color-ink-2); font:inherit;
-  font-size:13px; min-height:36px; padding:5px 11px;
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-sans);
 }
-.theme-controls select { max-width:88px; }
-.theme-controls button { display:flex; gap:6px; align-items:center; }
-.theme-controls button:hover { background:var(--accent-soft); color:var(--color-ac-blue); }
-.theme-controls [data-mode-icon] { font-size:18px; line-height:1; }
+pre,
+code,
+kbd,
+samp,
+textarea[spellcheck="false"] {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+::selection {
+  background: var(--accent-button);
+  color: var(--accent-button-ink);
+}
+button,
+select {
+  cursor: pointer;
+}
+button:disabled,
+select:disabled {
+  cursor: default;
+}
+.theme-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.theme-controls select,
+.theme-controls button {
+  background: oklch(0.27 0.03 255);
+  border: 1px solid oklch(0.48 0.03 255);
+  border-radius: 8px;
+  color: oklch(0.95 0.01 250);
+  font: inherit;
+  font-size: 13px;
+  min-height: 40px;
+  padding: 6px 12px;
+}
+.theme-controls select {
+  max-width: 106px;
+}
+.theme-controls button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.theme-controls button:hover {
+  background: oklch(0.36 0.04 255);
+}
+.theme-controls [data-mode-icon] {
+  font-size: 18px;
+  line-height: 1;
+}

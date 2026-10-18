@@ -4,9 +4,9 @@ const { compact = false } = Astro.props;
 ---
 <div class:list={["theme-controls", { "theme-controls--compact": compact }]} aria-label="รูปแบบเว็บ">
   <select data-theme-select aria-label="เลือกโทนสี">
-    <option value="lilac">Lilac</option>
-    <option value="sage">Sage</option>
-    <option value="mono">Mono</option>
+    <option value="ocean">Ocean</option>
+    <option value="forest">Forest</option>
+    <option value="graphite">Graphite</option>
   </select>
   <button type="button" data-mode-toggle aria-label="Light / Dark mode" aria-pressed="false">
     <span data-mode-icon aria-hidden="true">◐</span><span data-mode-label>Dark</span>
@@ -17,7 +17,7 @@ const { compact = false } = Astro.props;
   const sync = () => {
     const dark = root.dataset.mode === 'dark';
     document.querySelectorAll<HTMLSelectElement>('[data-theme-select]').forEach(select => {
-      select.value = root.dataset.theme ?? 'lilac';
+      select.value = root.dataset.theme ?? 'ocean';
     });
     document.querySelectorAll<HTMLButtonElement>('[data-mode-toggle]').forEach(button => {
       button.setAttribute('aria-pressed', String(dark));
@@ -50,7 +50,8 @@ const { compact = false } = Astro.props;
     if (event.key === 'int191-mode') {
       root.dataset.mode = event.newValue === 'dark' || event.newValue === 'light' ? event.newValue : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     } else if (event.key === 'int191-theme') {
-      root.dataset.theme = ['lilac', 'sage', 'mono'].includes(event.newValue ?? '') ? event.newValue! : 'lilac';
+      const value = ({lilac: 'ocean', sage: 'forest', mono: 'graphite'} as Record<string, string>)[event.newValue ?? ''] ?? event.newValue;
+      root.dataset.theme = ['ocean', 'forest', 'graphite'].includes(value ?? '') ? value! : 'ocean';
     } else return;
     notify();
   });

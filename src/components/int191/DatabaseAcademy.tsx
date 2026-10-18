@@ -14,6 +14,7 @@ import { type Lang } from "../../lib/int191/model";
 import NormalizationLab from "./NormalizationLab";
 import FDExplorer from "./FDExplorer";
 import ERLab from "./ERLab";
+import RelationshipPreview from "./RelationshipPreview";
 import PracticeCard from "./PracticeCard";
 import PracticeMode from "./PracticeMode";
 const SqlPlayground = lazy(() => import("./SqlPlayground"));
@@ -47,6 +48,7 @@ export default function DatabaseAcademy({
   const [section, setSection] = useState<Section>("dashboard");
   const [topicId, setTopicId] = useState("fundamentals");
   const [search, setSearch] = useState("");
+  const [topicsOpen, setTopicsOpen] = useState(false);
   const [progress, setProgress] = useState<Progress>(emptyProgress);
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
@@ -56,6 +58,8 @@ export default function DatabaseAcademy({
   const t = (th: string, en: string) => (lang === "th" ? th : en);
   const topic = topics.find((x) => x.id === topicId) ?? topics[0];
   const topicIndex = topics.indexOf(topic);
+  const currentTopic =
+    topics.find((x) => x.id === progress.current) ?? topics[0];
   const due = dueQuestionIds(progress.attempts);
   const latest = new Map(progress.attempts.map((a) => [a.id, a]));
   const mastered = [...latest.values()].filter(
@@ -69,7 +73,10 @@ export default function DatabaseAcademy({
       .includes(search.toLowerCase()),
   );
   useEffect(() => {
-    const savedLanguage = document.cookie.split("; ").find(v => v.startsWith(`${LANG_COOKIE}=`))?.split("=")[1];
+    const savedLanguage = document.cookie
+      .split("; ")
+      .find((v) => v.startsWith(`${LANG_COOKIE}=`))
+      ?.split("=")[1];
     const restoredLanguage = normalizeLang(savedLanguage);
     setLang(restoredLanguage);
     document.documentElement.lang = restoredLanguage;
@@ -121,6 +128,7 @@ export default function DatabaseAcademy({
   }, [progress, ready]);
   function go(next: Section, id?: string) {
     setSection(next);
+    setTopicsOpen(false);
     if (id) {
       setTopicId(id);
       if (next === "learn")
@@ -173,13 +181,12 @@ export default function DatabaseAcademy({
       !a.revealed,
   );
   return (
-    <div className="db-academy" lang={lang}>
+    <div className="db-academy" lang={lang} data-section={section}>
       <a className="db-skip" href="#db-content-title">
         {t("ข้ามไปเนื้อหา", "Skip to learning content")}
       </a>
       <header className="db-academy-header">
         <div>
-          <a href={import.meta.env.BASE_URL}>INT191 · Database Lab</a>
           <h1>
             {t(
               "เข้าใจฐานข้อมูล ผ่านการลงมือทำ",
@@ -188,8 +195,8 @@ export default function DatabaseAcademy({
           </h1>
           <p>
             {t(
-              "เรียน → ดูภาพ → ทดลองกับตาราง → ฝึก → อธิบายเหตุผล",
-              "Learn → visualize → explore tables → practice → explain why",
+              "เริ่มจากความเข้าใจ ไปให้ถึงการออกแบบด้วยตัวเอง",
+              "From understanding a table to designing a database.",
             )}
           </p>
         </div>
@@ -208,8 +215,8 @@ export default function DatabaseAcademy({
       </header>
       <p className="db-local-note">
         {t(
-          "เรียนได้โดยไม่เข้าสู่ระบบ · Progress ของพื้นที่นี้เก็บในเบราว์เซอร์นี้ บนอุปกรณ์นี้",
-          "No login needed · This workspace saves progress in this browser, on this device.",
+          "ไม่ต้องเข้าสู่ระบบ · บันทึกความคืบหน้าในเบราว์เซอร์นี้",
+          "No login required · Progress saved in this browser.",
         )}
       </p>
       {storageError && (
@@ -250,56 +257,83 @@ export default function DatabaseAcademy({
         ))}
       </nav>
       <div className="db-academy-body">
-        <aside className="db-topic-nav">
-          <label htmlFor="db-topic-search">
-            {t("ค้นหาหัวข้อ INT191", "Search INT191 topics")}
-          </label>
-          <input
-            id="db-topic-search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={t("เช่น Partial, PK, JOIN", "e.g. Partial, PK, JOIN")}
-          />
-          <nav
-            aria-label={t(
-              "หัวข้อทั้งหมด ไม่บังคับลำดับ",
-              "All topics, no prerequisites",
-            )}
+        <aside className="db-topic-nav" data-open={topicsOpen}>
+          <button
+            className="db-curriculum-toggle"
+            type="button"
+            aria-expanded={topicsOpen}
+            aria-controls="db-topic-panel"
+            onClick={() => setTopicsOpen((v) => !v)}
           >
-            {visibleTopics.map((x) => (
-              <button
-                type="button"
-                key={x.id}
-                aria-current={
-                  section === "learn" && topicId === x.id ? "page" : undefined
-                }
-                onClick={() => go("learn", x.id)}
-              >
-                <span>{x.title[lang]}</span>
-                <small>
-                  {progress.completed.includes(x.id)
-                    ? "✓"
-                    : progress.bookmarks.includes(x.id)
-                      ? "★"
-                      : "→"}
-                </small>
-              </button>
-            ))}
-          </nav>
-          {!visibleTopics.length && (
-            <p>
-              {t(
-                "ไม่พบหัวข้อ ลองใช้ศัพท์อังกฤษหรือคำไทยสั้นลง",
-                "No topic found. Try an English term or a shorter Thai phrase.",
-              )}
-            </p>
-          )}
-          <button type="button" onClick={() => go("glossary")}>
-            {labels.glossary}
+            <span>
+              {t("สารบัญบทเรียน", "Course contents")}{" "}
+              <small>
+                {topics.length} {t("บท", "topics")}
+              </small>
+            </span>
+            <span aria-hidden="true">{topicsOpen ? "−" : "+"}</span>
           </button>
-          <a href={import.meta.env.BASE_URL}>
-            {t("กลับหน้าหลัก", "Back to home")}
-          </a>
+          <div className="db-topic-content" id="db-topic-panel">
+            <p className="db-rail-heading">
+              {t("สารบัญบทเรียน", "Course contents")}{" "}
+              <span>{topics.length}</span>
+            </p>
+            <label htmlFor="db-topic-search">
+              {t("ค้นหาหัวข้อ INT191", "Search INT191 topics")}
+            </label>
+            <input
+              id="db-topic-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t(
+                "เช่น Partial, PK, JOIN",
+                "e.g. Partial, PK, JOIN",
+              )}
+            />
+            <nav
+              aria-label={t(
+                "หัวข้อทั้งหมด ไม่บังคับลำดับ",
+                "All topics, no prerequisites",
+              )}
+            >
+              {visibleTopics.map((x) => (
+                <button
+                  type="button"
+                  key={x.id}
+                  aria-current={
+                    section === "learn" && topicId === x.id ? "page" : undefined
+                  }
+                  onClick={() => go("learn", x.id)}
+                >
+                  <span className="db-topic-number" aria-hidden="true">
+                    {String(topics.indexOf(x) + 1).padStart(2, "0")}
+                  </span>
+                  <span>{x.title[lang]}</span>
+                  <small>
+                    {progress.completed.includes(x.id)
+                      ? "✓"
+                      : progress.bookmarks.includes(x.id)
+                        ? "★"
+                        : "→"}
+                  </small>
+                </button>
+              ))}
+            </nav>
+            {!visibleTopics.length && (
+              <p>
+                {t(
+                  "ไม่พบหัวข้อ ลองใช้ศัพท์อังกฤษหรือคำไทยสั้นลง",
+                  "No topic found. Try an English term or a shorter Thai phrase.",
+                )}
+              </p>
+            )}
+            <button type="button" onClick={() => go("glossary")}>
+              {labels.glossary}
+            </button>
+            <a href={import.meta.env.BASE_URL}>
+              {t("กลับหน้าหลัก", "Back to home")}
+            </a>
+          </div>
         </aside>
         <section
           className="db-learning-content"
@@ -328,61 +362,118 @@ export default function DatabaseAcademy({
           {section === "dashboard" && (
             <>
               <section className="db-overview">
-                <h3>{t("กลับมาเรียนต่อ", "Continue learning")}</h3>
-                {!ready ? (
-                  <p role="status">
-                    {t(
-                      "กำลังอ่าน progress ในเครื่อง…",
-                      "Loading local progress…",
-                    )}
-                  </p>
-                ) : (
-                  <>
-                    <p>
-                      {progress.completed.length}/{topics.length}{" "}
+                <div className="db-resume-copy">
+                  <h3>{t("กลับมาเรียนต่อ", "Continue learning")}</h3>
+                  {!ready ? (
+                    <p role="status">
                       {t(
-                        "บทเรียนที่ทำแบบฝึกแล้วและกดเรียนจบ",
-                        "lessons practiced and marked complete",
-                      )}{" "}
-                      · {mastered}/{latest.size}{" "}
-                      {t(
-                        "ข้อที่ตอบถูกโดยไม่เปิดเฉลยในครั้งล่าสุด",
-                        "questions last answered correctly without revealing",
+                        "กำลังอ่าน progress ในเครื่อง…",
+                        "Loading local progress…",
                       )}
                     </p>
-                    <progress
-                      value={progress.completed.length}
-                      max={topics.length}
-                      aria-label={t("ความคืบหน้าบทเรียน", "Lesson progress")}
-                    />
-                    <p>
-                      {t("หัวข้อล่าสุด", "Current topic")}:{" "}
-                      {
-                        topics.find((x) => x.id === progress.current)?.title[
-                          lang
-                        ]
-                      }
-                    </p>
-                    <div className="db-toolbar">
-                      <button
-                        type="button"
-                        onClick={() => go("learn", progress.current)}
-                      >
-                        {t("เรียนต่อ", "Resume")}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => go("learn", nextTopic.id)}
-                      >
-                        {t("แนะนำถัดไป", "Recommended next")}:{" "}
-                        {nextTopic.title[lang]}
-                      </button>
-                    </div>
-                  </>
+                  ) : (
+                    <>
+                      <p className="db-current-topic">
+                        {currentTopic.title[lang]}
+                      </p>
+                      <p className="db-resume-objective">
+                        {currentTopic.objective[lang]}
+                      </p>
+                      <div className="db-toolbar">
+                        <button
+                          className="db-primary-action"
+                          type="button"
+                          onClick={() => go("learn", progress.current)}
+                        >
+                          {t("เรียนต่อ", "Resume")}{" "}
+                          <span aria-hidden="true">→</span>
+                        </button>
+                        <button
+                          className="db-resume-next"
+                          type="button"
+                          onClick={() => go("learn", nextTopic.id)}
+                        >
+                          {t("แนะนำถัดไป", "Recommended next")}:{" "}
+                          {nextTopic.title[lang]}
+                        </button>
+                      </div>
+                      <div className="db-progress-caption">
+                        <span>
+                          {progress.completed.length}/{topics.length}{" "}
+                          {t("บทเรียนที่เรียนจบ", "lessons completed")}
+                        </span>
+                        <span>
+                          {Math.round(
+                            (progress.completed.length / topics.length) * 100,
+                          )}
+                          %
+                        </span>
+                      </div>
+                      <progress
+                        value={progress.completed.length}
+                        max={topics.length}
+                        aria-label={t("ความคืบหน้าบทเรียน", "Lesson progress")}
+                      />
+                      <p className="db-practice-progress">
+                        {t(
+                          "แบบฝึกที่ตอบถูกในครั้งล่าสุดโดยไม่เปิดเฉลย",
+                          "Latest answers correct without revealing",
+                        )}
+                        : {mastered}/{latest.size}
+                      </p>
+                    </>
+                  )}
+                </div>
+                <RelationshipPreview lang={lang} onExplore={() => go("er")} />
+              </section>
+              <section
+                className="db-lab-shortcuts"
+                aria-label={t(
+                  "เลือกห้องทดลองอย่างรวดเร็ว",
+                  "Quick access to laboratories",
                 )}
+              >
+                {(
+                  [
+                    [
+                      "normalization",
+                      "UNF → BCNF",
+                      t("แยกตารางทีละขั้น", "Decompose step by step"),
+                    ],
+                    [
+                      "fd",
+                      "A → B",
+                      t(
+                        "ติดตาม Functional Dependency",
+                        "Trace functional dependencies",
+                      ),
+                    ],
+                    [
+                      "er",
+                      "1 : N",
+                      t("สำรวจความสัมพันธ์", "Explore relationships"),
+                    ],
+                    [
+                      "sql",
+                      "SELECT *",
+                      t(
+                        "ทดลอง query ดูผลลัพธ์",
+                        "Run a query. See the result.",
+                      ),
+                    ],
+                  ] as const
+                ).map(([id, visual, description]) => (
+                  <button type="button" key={id} onClick={() => go(id)}>
+                    <code>{visual}</code>
+                    <span>
+                      {labels[id]} <span aria-hidden="true">↗</span>
+                    </span>
+                    <small>{description}</small>
+                  </button>
+                ))}
               </section>
               <div className="db-dashboard-columns">
-                <section>
+                <section className="db-review-panel">
                   <h3>{t("ควรกลับมาทบทวน", "Review queue")}</h3>
                   <p>
                     {due.length
@@ -392,6 +483,16 @@ export default function DatabaseAcademy({
                           "No review items yet. Practice to find concepts that need more attention.",
                         )}
                   </p>
+                  {!due.length && (
+                    <button
+                      className="db-text-action"
+                      type="button"
+                      onClick={() => go("practice")}
+                    >
+                      {t("ลองทำแบบฝึก", "Start a quick practice")}{" "}
+                      <span aria-hidden="true">→</span>
+                    </button>
+                  )}
                   {due.map((id) => {
                     const q = questions.find((q) => q.id === id)!;
                     return (
@@ -428,6 +529,14 @@ export default function DatabaseAcademy({
                     </p>
                   )}
                   <h3>{t("กิจกรรมล่าสุด", "Recent learning")}</h3>
+                  {!progress.activity.length && (
+                    <p className="db-empty-activity">
+                      {t(
+                        "บทเรียนที่เปิดจะปรากฏที่นี่",
+                        "Your visited lessons will appear here.",
+                      )}
+                    </p>
+                  )}
                   <ol>
                     {progress.activity
                       .slice()
@@ -445,21 +554,28 @@ export default function DatabaseAcademy({
                   </ol>
                 </section>
               </div>
-              <section>
-                <h3>
-                  {t(
-                    "เส้นทางเรียนที่แนะนำ เลือกข้ามได้ทุกบท",
-                    "Suggested learning journey, every topic is independently accessible",
-                  )}
-                </h3>
+              <section className="db-course-map">
+                <div className="db-course-map-heading">
+                  <h3>{t("เส้นทางการเรียน", "Your learning path")}</h3>
+                  <span>{t("เลือกเริ่มได้ทุกบท", "Start with any topic")}</span>
+                </div>
                 <ol className="db-journey">
                   {topics.map((x) => (
                     <li key={x.id}>
                       <button type="button" onClick={() => go("learn", x.id)}>
-                        {progress.completed.includes(x.id) ? "✓ " : ""}
-                        {x.title[lang]}
+                        <span className="db-journey-number" aria-hidden="true">
+                          {progress.completed.includes(x.id)
+                            ? "✓"
+                            : String(topics.indexOf(x) + 1).padStart(2, "0")}
+                        </span>
+                        <span className="db-journey-copy">
+                          <strong>{x.title[lang]}</strong>
+                          <small>{x.objective[lang]}</small>
+                        </span>
+                        <span className="db-journey-arrow" aria-hidden="true">
+                          ↗
+                        </span>
                       </button>
-                      <span aria-hidden="true">↓</span>
                     </li>
                   ))}
                 </ol>

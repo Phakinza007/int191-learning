@@ -1,25 +1,28 @@
-/* INT191 extends the existing theme tokens. All selectors are scoped to this island. */
+/* INT191 study workspace. Learning interactions retain semantic PK/FK roles. */
 .db-academy {
-  margin: 1.5rem 0 4rem;
+  margin: 1.75rem 0 3rem;
   min-width: 0;
   --db-pk: var(--practice-info);
   --db-fk: var(--practice-success);
 }
 .db-academy h1 {
-  font-size: 1.8rem;
+  font-size: 1.75rem;
   line-height: 1.4;
-  margin: 0.4rem 0;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 .db-academy h2 {
   font-size: 1.4rem;
-  line-height: 1.45;
+  line-height: 1.5;
   margin: 1.25rem 0 0.75rem;
+  text-wrap: balance;
 }
 .db-academy h3 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   line-height: 1.5;
   margin: 1.15rem 0 0.65rem;
+  text-wrap: balance;
 }
 .db-academy h4 {
   font-size: 1rem;
@@ -44,6 +47,10 @@
   background: var(--color-surface);
   cursor: pointer;
   text-align: start;
+  transition:
+    background-color 160ms ease-out,
+    border-color 160ms ease-out,
+    color 160ms ease-out;
 }
 .db-academy button:hover:not(:disabled) {
   background: var(--color-surface-2);
@@ -127,7 +134,7 @@
 .db-academy-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
 }
 .db-academy-header .lang-toggle {
@@ -137,34 +144,38 @@
   min-width: 44px;
 }
 .db-local-note {
-  color: var(--color-ink-2);
-  font-size: 0.88rem;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  margin: 0.4rem 0 1.2rem !important;
 }
 .db-main-nav,
 .db-lab-nav {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.25rem;
   flex-wrap: wrap;
-  padding: 1rem 0;
+  padding: 0;
   border-bottom: 1px solid var(--color-border);
 }
 .db-main-nav button {
   border-color: transparent;
+  border-radius: 0;
+  padding: 0.85rem 1.1rem;
   background: transparent;
+  font-size: 0.92rem;
 }
 .db-academy-body {
   display: grid;
-  grid-template-columns: 13rem minmax(0, 1fr);
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  grid-template-columns: 14.5rem minmax(0, 1fr);
+  gap: 2rem;
+  margin-top: 1.75rem;
 }
 .db-topic-nav {
   align-self: start;
   position: sticky;
-  top: 6rem;
-  max-height: calc(100dvh - 7rem);
+  top: 1.5rem;
+  max-height: calc(100dvh - 3rem);
   overflow: auto;
-  padding-right: 0.5rem;
+  padding-right: 0.4rem;
 }
 .db-topic-nav input {
   width: 100%;
@@ -176,12 +187,15 @@
 }
 .db-topic-nav nav button {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   border-color: transparent;
   background: transparent;
-  font-size: 0.87rem;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  padding: 0.65rem 0.5rem;
+  min-height: 48px;
+  border-radius: 8px;
 }
 .db-topic-nav > a {
   display: block;
@@ -191,11 +205,15 @@
 .db-learning-content {
   min-width: 0;
   container-type: inline-size;
+  padding: 1.5rem 1.75rem 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
 }
 .db-section-title {
-  color: var(--color-ink-2);
-  font-size: 1rem !important;
-  margin-top: 0 !important;
+  color: var(--color-ink);
+  font-size: 1.35rem !important;
+  margin: 0 0 1.2rem !important;
 }
 .db-section-title:focus {
   outline: none;
@@ -244,21 +262,28 @@
   transform: none;
 }
 .db-overview {
-  padding: 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
-  background: var(--color-surface);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 1.6rem;
+  border: 1px solid var(--brand-panel);
+  border-radius: 12px;
+  background: var(--brand-panel);
+  color: var(--brand-panel-ink);
 }
 .db-overview progress {
+  display: block;
   width: 100%;
-  height: 0.65rem;
-  accent-color: var(--color-ac-blue);
+  height: 0.35rem;
+  accent-color: var(--action);
 }
 .db-dashboard-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin: 1.3rem 0;
+  gap: 2.5rem;
+  padding: 0.75rem 0 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  margin: 0.5rem 0 1.75rem;
 }
 .db-list-link {
   display: block;
@@ -266,17 +291,30 @@
   margin: 0.4rem 0;
 }
 .db-journey {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1.5rem;
   padding: 0;
+  margin: 0;
   list-style: none;
 }
 .db-journey li {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 0.4rem 0;
+  align-items: stretch;
+  min-width: 0;
+  border-bottom: 1px solid var(--color-border);
+  margin: 0;
 }
 .db-journey li button {
-  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+  padding: 1.1rem 0.35rem;
+  border: 0;
+  background: transparent;
+  border-radius: 6px;
 }
 .db-journey li:last-child > span {
   visibility: hidden;
@@ -730,4 +768,468 @@
   clip-path: none;
   white-space: normal;
   display: inline-block;
+}
+
+/* Learning shell and curriculum */
+.db-main-nav button[aria-current="page"] {
+  background: transparent;
+  color: var(--color-ac-blue);
+  border-color: transparent;
+  box-shadow: inset 0 -3px var(--color-ac-blue);
+}
+.db-academy .db-lab-nav {
+  gap: 0.3rem;
+  padding: 0 0 1rem;
+  margin-bottom: 1.25rem;
+}
+.db-academy .db-lab-nav button {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 7px;
+}
+.db-topic-nav .db-curriculum-toggle {
+  display: none;
+}
+.db-rail-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.94rem;
+  font-weight: 700;
+  margin: 0 0 1rem !important;
+}
+.db-rail-heading > span {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border-2);
+  border-radius: 5px;
+  padding: 0 0.4rem;
+}
+.db-topic-nav label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+.db-topic-nav input {
+  font-size: 0.8rem;
+}
+.db-topic-number {
+  font:
+    0.7rem ui-monospace,
+    monospace;
+  color: var(--color-muted);
+  flex: 0 0 1.2rem;
+}
+.db-topic-nav nav button > span:nth-child(2) {
+  flex: 1;
+}
+.db-topic-nav nav button > small {
+  color: var(--color-ac-blue);
+}
+.db-topic-content > button {
+  width: 100%;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+.db-academy-header p {
+  color: var(--color-ink-2);
+  font-size: 0.9rem;
+  margin: 0;
+}
+.db-academy-header .lang-toggle {
+  border: 1px solid var(--color-border-2);
+  border-radius: 8px;
+  padding: 3px;
+  background: var(--color-surface);
+}
+.db-academy-header .lang-toggle button {
+  min-height: 36px;
+  padding: 0.25rem 0.6rem;
+  border: 0;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+.db-academy-header .lang-toggle button[aria-pressed="true"] {
+  background: var(--accent-button);
+  color: var(--accent-button-ink);
+}
+
+/* One next action, with a real relationship preview */
+.db-overview h3 {
+  color: var(--brand-panel-muted);
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin: 0;
+}
+.db-overview .db-current-topic {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  font-weight: 700;
+  margin: 0.45rem 0;
+  text-wrap: balance;
+}
+.db-overview .db-resume-objective {
+  color: var(--brand-panel-muted);
+  font-size: 0.88rem;
+  margin: 0 0 1rem;
+}
+.db-overview .db-toolbar {
+  gap: 0.6rem;
+  margin: 0.9rem 0 1.25rem;
+}
+.db-academy .db-primary-action {
+  color: var(--action-ink);
+  background: var(--action);
+  border-color: var(--action);
+  font-weight: 700;
+  padding: 0.55rem 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-radius: 7px;
+}
+.db-academy .db-primary-action:hover {
+  color: var(--action-ink);
+  background: oklch(0.91 0.13 70);
+  border-color: var(--action);
+}
+.db-overview .db-resume-next {
+  color: var(--brand-panel-muted);
+  background: transparent;
+  border-color: var(--brand-panel-border);
+  font-size: 0.75rem;
+  padding: 0.4rem 0.6rem;
+}
+.db-overview .db-resume-next:hover {
+  background: oklch(1 0 0 / 0.1);
+  color: var(--brand-panel-ink);
+  border-color: var(--brand-panel-muted);
+}
+.db-progress-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--brand-panel-muted);
+  margin: 0.5rem 0;
+}
+.db-overview .db-practice-progress {
+  color: var(--brand-panel-muted);
+  font-size: 0.7rem;
+  margin: 0.6rem 0 0;
+}
+.db-overview progress,
+.db-overview progress::-webkit-progress-bar {
+  background: var(--brand-panel-border);
+}
+.db-overview progress::-webkit-progress-value {
+  background: var(--action);
+}
+.db-overview progress::-moz-progress-bar {
+  background: var(--action);
+}
+.db-overview :focus-visible {
+  outline-color: var(--action);
+}
+.db-overview .db-relationship-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  color: var(--brand-panel-muted);
+  background: transparent;
+  min-width: 0;
+  border-radius: 8px;
+  align-self: center;
+}
+.db-overview .db-relationship-preview:hover {
+  background: oklch(1 0 0 / 0.05);
+  border-color: transparent;
+}
+.db-relationship-preview svg {
+  width: 100%;
+  max-width: 370px;
+  overflow: visible;
+}
+.db-relationship-preview > span {
+  font-size: 0.73rem;
+  padding: 0.4rem 0.5rem;
+}
+.db-relationship-preview > span > span {
+  color: var(--action);
+  padding-inline-start: 0.6rem;
+}
+.db-preview-node {
+  fill: oklch(0.27 0.065 255);
+  stroke: var(--brand-panel-border);
+}
+.db-preview-rule {
+  stroke: var(--brand-panel-border);
+}
+.db-relationship-preview text {
+  fill: oklch(0.92 0.02 250);
+  font:
+    11px ui-monospace,
+    monospace;
+}
+.db-relationship-preview .db-preview-name {
+  fill: oklch(1 0 0);
+  font-weight: 700;
+  font-size: 12px;
+}
+.db-relationship-preview .db-preview-key {
+  fill: var(--action);
+  font-weight: 700;
+}
+.db-preview-link {
+  stroke: var(--action);
+  fill: none;
+  stroke-width: 2;
+}
+.db-preview-dot {
+  fill: var(--action);
+}
+
+/* Useful routes, quiet rows, ordered learning steps */
+.db-lab-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+  border-bottom: 1px solid var(--color-border);
+  padding: 1.1rem 0;
+}
+.db-lab-shortcuts button {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.35rem;
+  background: transparent;
+  border: 0;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.8rem;
+  min-width: 0;
+}
+.db-lab-shortcuts code {
+  font-size: 0.73rem;
+  color: var(--color-ac-blue);
+  font-weight: 600;
+}
+.db-lab-shortcuts button > span {
+  font-weight: 700;
+}
+.db-lab-shortcuts button > span > span {
+  color: var(--color-muted);
+}
+.db-lab-shortcuts small {
+  font-size: 0.73rem;
+  color: var(--color-muted);
+  text-align: start;
+}
+.db-dashboard-columns p {
+  font-size: 0.88rem;
+  color: var(--color-ink-2);
+}
+.db-dashboard-columns ol {
+  padding-inline-start: 1.2rem;
+  font-size: 0.82rem;
+}
+.db-dashboard-columns .db-text-action {
+  border: 0;
+  background: transparent;
+  color: var(--color-ac-blue);
+  font-size: 0.85rem;
+  padding: 0.3rem 0;
+  font-weight: 600;
+}
+.db-course-map-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.db-course-map-heading h3 {
+  margin: 0;
+}
+.db-course-map-heading > span {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+.db-journey-number {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--color-surface-2);
+  color: var(--color-ink-2);
+  font:
+    0.75rem ui-monospace,
+    monospace;
+}
+.db-journey-copy {
+  flex: 1;
+  min-width: 0;
+}
+.db-journey-copy strong {
+  display: block;
+  font-size: 0.87rem;
+  font-weight: 600;
+}
+.db-journey-copy small {
+  display: block;
+  font-size: 0.73rem;
+  line-height: 1.7;
+  color: var(--color-muted);
+  margin-top: 0.2rem;
+}
+.db-journey-arrow {
+  color: var(--color-ac-blue);
+}
+.db-sources {
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+}
+.db-sources details {
+  border-block-start: 0;
+  padding: 0;
+}
+.db-lesson > p,
+.db-lesson > details {
+  margin-block: 1.1rem;
+}
+.db-lesson-heading > h3 {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 1150px) {
+  .db-academy-body {
+    grid-template-columns: 12.5rem minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+  .db-learning-content {
+    padding: 1.25rem;
+  }
+  .db-overview {
+    grid-template-columns: 1fr;
+  }
+  .db-overview .db-relationship-preview {
+    display: none;
+  }
+  .db-lab-shortcuts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 800px) {
+  .db-academy {
+    margin-top: 1.25rem;
+  }
+  .db-academy h1 {
+    font-size: 1.4rem;
+  }
+  .db-academy-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .db-topic-nav {
+    position: static;
+    max-height: none;
+    padding: 0;
+  }
+  .db-topic-nav .db-curriculum-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 48px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-2);
+  }
+  .db-curriculum-toggle small {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    margin-inline-start: 0.5rem;
+  }
+  .db-topic-nav[data-open="false"] .db-topic-content {
+    display: none;
+  }
+  .db-topic-content {
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface);
+    margin-top: 0.5rem;
+  }
+  .db-rail-heading {
+    display: none;
+  }
+  .db-topic-nav nav {
+    max-height: 19rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .db-academy-header {
+    flex-wrap: nowrap;
+    align-items: start;
+    gap: 0.5rem;
+  }
+  .db-academy-header .lang-toggle {
+    margin-top: 0.15rem;
+  }
+  .db-academy-header p {
+    font-size: 0.8rem;
+  }
+  .db-main-nav button {
+    font-size: 0.8rem;
+    padding: 0.7rem 0.8rem;
+  }
+  .db-learning-content {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  .db-overview {
+    padding: 1.25rem;
+  }
+  .db-overview .db-current-topic {
+    font-size: 1.3rem;
+  }
+  .db-dashboard-columns {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .db-journey {
+    grid-template-columns: 1fr;
+  }
+  .db-course-map-heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .db-section-title {
+    font-size: 1.2rem !important;
+  }
+  .db-lesson-heading > h3 {
+    font-size: 1.2rem;
+  }
+}
+@media (max-width: 420px) {
+  .db-topic-nav nav {
+    grid-template-columns: 1fr;
+  }
+  .db-academy-header {
+    flex-wrap: wrap;
+  }
+  .db-academy h1 {
+    font-size: 1.3rem;
+  }
+  .db-academy-header .lang-toggle {
+    margin-top: 0.25rem;
+  }
+  .db-lab-shortcuts {
+    gap: 0.25rem;
+  }
+  .db-overview {
+    padding: 1rem;
+  }
 }
