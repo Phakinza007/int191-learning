@@ -13,6 +13,7 @@ import PracticeCard from "../src/components/int191/PracticeCard";
 import FDExplorer from "../src/components/int191/FDExplorer";
 import SchemaDiagram from "../src/components/int191/SchemaDiagram";
 import DatabaseTable from "../src/components/int191/DatabaseTable";
+import ERLab from "../src/components/int191/ERLab";
 import { jobFinal, studentTables } from "../src/lib/int191/model";
 afterEach(cleanup);
 it("uses progressive hints after wrong answers and does not reveal the solution until requested", () => {
@@ -87,4 +88,17 @@ it("keeps table selection accessible without relying on color", () => {
       .getByRole("button", { name: "D02" })
       .getAttribute("aria-pressed"),
   ).toBe("false");
+});
+it("renders EER specialization constraints as a diagram and explains table mapping", () => {
+  render(<ERLab lang="en" onPractice={() => {}} />);
+  expect(screen.getByRole("img", { name: /ACCOUNT specialization/ })).toBeTruthy();
+  expect(screen.getByText("ACCOUNT")).toBeTruthy();
+  expect(screen.getByText("CREATOR")).toBeTruthy();
+  expect(screen.getByText("PREMIUM")).toBeTruthy();
+  expect(screen.getByText("accountId PK", { exact: true })).toBeTruthy();
+  expect(screen.getAllByText("accountId PK/FK", { exact: true })).toHaveLength(2);
+  fireEvent.click(screen.getByRole("button", { name: /Disjoint/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Total/ }));
+  expect(screen.getByText("d", { selector: "text" })).toBeTruthy();
+  expect(screen.getByText(/every account must appear in exactly one subclass table/)).toBeTruthy();
 });

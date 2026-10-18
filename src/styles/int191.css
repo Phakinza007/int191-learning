@@ -1330,31 +1330,54 @@
 .db-eer-controls fieldset button {
   flex: 1 1 11rem;
 }
-.db-eer-diagram {
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
+.db-eer-figure {
+  width: min(100%, 38rem);
   margin: 1rem auto;
-  max-width: 32rem;
   text-align: center;
 }
-.db-eer-diagram > strong,
-.db-eer-diagram > div strong {
-  display: grid;
-  gap: 0.2rem;
-  min-width: 9rem;
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--color-ac-blue);
-  border-radius: 0.7rem;
-  background: var(--accent-soft);
+.db-eer-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--color-ink-2);
 }
-.db-eer-diagram small {
-  color: var(--color-muted);
+.db-eer-nodes rect,
+.db-eer-nodes circle {
+  fill: var(--accent-soft);
+  stroke: var(--color-ac-blue);
+  stroke-width: 2;
+}
+.db-eer-nodes text {
+  fill: var(--color-ink);
+  font: 700 15px system-ui, sans-serif;
+}
+.db-eer-nodes .db-eer-node-subtitle {
+  fill: var(--color-muted);
+  font-size: 11px;
   font-weight: 400;
 }
-.db-eer-diagram > div {
-  display: flex;
-  gap: 1rem;
+.db-eer-figure figcaption {
+  color: var(--color-muted);
+  font-size: 0.88rem;
+}
+.db-eer-mapping {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--color-surface-2);
+}
+.db-eer-mapping h4 {
+  margin-top: 0;
+}
+.db-schema-list {
+  display: grid;
+  gap: 0.5rem;
+  overflow-wrap: anywhere;
+}
+.db-schema-list code {
+  padding: 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background: var(--color-surface);
 }
 @media (max-width: 720px) {
   .db-exam-brief-heading {

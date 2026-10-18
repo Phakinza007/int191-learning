@@ -76,8 +76,8 @@ export const topics: Topic[] = [
       "Read X → Y and identify determinants",
     ),
     explanation: bi(
-      "X → Y หมายถึงทุกแถวที่มีค่า X เท่ากัน ต้องมีค่า Y เท่ากันในทุกสถานะที่ถูกต้องของ relation X คือ determinant ไม่ได้แปลว่า Y → X และไม่จำเป็นต้องเป็น PK",
-      "X → Y means that tuples agreeing on X must agree on Y in every valid instance. X is the determinant. This does not imply Y → X, and X need not be a PK.",
+      "X → Y เป็นกฎของ relation: ทุกคู่แถวในทุกสถานะที่ถูกต้อง ถ้ามี X เท่ากันต้องมี Y เท่ากันด้วย X คือ determinant; กฎนี้ไม่ได้แปลว่ากลับทิศ Y → X ได้ และ X ไม่จำเป็นต้องเป็น PK เช่น jobNo → jobDate แต่ {jobNo,partNo} → quantity ต้องใช้ค่าทั้งคู่ กฎ A → A เป็น trivial FD เพราะด้านขวาอยู่ในด้านซ้ายอยู่แล้ว",
+      "X → Y is a relation rule: in every valid instance, any two tuples agreeing on X must also agree on Y. X is the determinant; the rule does not reverse to Y → X, and X need not be a PK. For example, jobNo → jobDate, while {jobNo,partNo} → quantity needs both values. A → A is a trivial FD because the right side is already contained in the left.",
     ),
     why: bi(
       "กดลูกศร FD3 เพื่อเห็นว่า partNo กำหนด partName และ unitPrice โดยไม่ต้องรู้ jobNo",
@@ -123,16 +123,16 @@ export const topics: Topic[] = [
       "Prove minimality and identify prime attributes",
     ),
     explanation: bi(
-      "หาคีย์จาก FD ไม่ใช่แค่เลือกคอลัมน์ที่ไม่มีชื่อซ้ำ Prime attribute คือ attribute ที่อยู่ใน candidate key อย่างน้อยหนึ่งชุด ไม่ใช่แค่อยู่ใน PK ที่เลือก Non-prime ไม่อยู่ใน candidate ใดเลย",
-      "Find keys from FDs, not merely from unique-looking columns. An attribute is prime if it belongs to any candidate key, not just the chosen PK. Non-prime attributes belong to no candidate key.",
+      "หา closure ของชุด attribute ก่อน: ถ้า X+ ครบทุก attribute ใน relation, X เป็น superkey จากนั้นตัดสมาชิกออกทีละตัว; ถ้าตัดตัวใดแล้วไม่ครบ X จึงเป็น Candidate Key (minimal หมายถึงไม่มีส่วนเกิน ไม่ได้หมายถึงมีจำนวนคอลัมน์น้อยที่สุดเมื่อเทียบกับคีย์ชุดอื่น) Prime attribute คือ attribute ที่อยู่ใน candidate key อย่างน้อยหนึ่งชุด ไม่ใช่แค่อยู่ใน PK ที่เลือก",
+      "Find the closure first: if X+ contains every relation attribute, X is a superkey. Then remove attributes one at a time; X is a candidate key if removing any one makes it stop being a superkey. Minimal means no redundant member, not the fewest columns compared with other keys. An attribute is prime if it belongs to any candidate key, not just the selected PK.",
     ),
     why: bi(
-      "ตัวอย่าง BCNF มี candidate สองชุด {studentId,courseId} และ {studentId,instructorId} ดังนั้นทั้งสาม attribute เป็น prime",
-      "The BCNF counterexample has two candidate keys: {studentId,courseId} and {studentId,instructorId}. All three attributes are prime.",
+      "ใน ENROLMENT, SC → I และ I → C: closure ของ {S,C} ครบ S,C,I; ตัด S เหลือ {C}+ = {C} และตัด C เหลือ {S}+ = {S} จึงเป็นคีย์ ส่วน {S,I} ก็เป็นคีย์อีกชุด แม้มีสอง attribute เท่ากัน ตัวอย่างนี้แสดง prime attribute ครบทั้งสาม",
+      "In ENROLMENT, SC → I and I → C: {S,C}+ contains S,C,I. Remove S and {C}+ is only {C}; remove C and {S}+ is only {S}, so SC is a candidate key. {S,I} is another candidate key. All three attributes are prime.",
     ),
     mistake: bi(
-      "Superkey ที่มี attribute เกินยังไม่เป็น candidate และมี PK คอลัมน์เดียวก็ไม่ได้รับประกัน 3NF",
-      "A superkey with redundant attributes is not a candidate key. A single-column PK does not guarantee 3NF.",
+      "minimal ไม่ได้แปลว่าต้องเป็นคีย์ที่สั้นที่สุดในทุกชุด: คีย์ {A,B} และ {A,C,D} เป็น candidate ได้พร้อมกัน ถ้าแต่ละชุดระบุแถวได้และตัดสมาชิกตัวใดออกไม่ได้ ส่วน superkey ที่มี attribute เกินยังไม่เป็น candidate",
+      "Minimal does not mean shortest among all keys: {A,B} and {A,C,D} can both be candidate keys if each identifies tuples and no member can be removed. A superkey with an extra attribute is not a candidate key.",
     ),
     lab: "fd",
     question: "prime",
