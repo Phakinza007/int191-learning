@@ -151,7 +151,7 @@ export default function SchemaDiagram({
                 relations[e.child].columns.some(
                   (c) => c.name === e.column && c.pk,
                 );
-              const label = `${relations[e.parent].name} → ${relations[e.child].name}: ${e.column} FK → ${e.ref} (${unique ? "1:0..1" : "1:0..N"})`;
+              const label = `${unique ? "1 : 0..1" : "1 : 0..N"} · ${relations[e.parent].name} → ${relations[e.child].name}: ${e.column} FK → ${e.ref}`;
               return (
                 <g
                   key={i}
@@ -188,19 +188,31 @@ export default function SchemaDiagram({
                 <g
                   key={r.name}
                   transform={`translate(${p.x},${p.y})`}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`${r.name} entity`}
-                  aria-pressed={selected === r.name}
                   onClick={() => choose(r.name)}
-                  onKeyDown={(e) => onKey(e, () => choose(r.name))}
                   className="db-entity"
                   data-active={selected === r.name}
                 >
-                  <rect width="290" height="180" rx="12" />
-                  <text className="db-entity-title" x="16" y="28">
-                    {r.name}
-                  </text>
+                  <g
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${r.name} entity`}
+                    aria-describedby={`${id}-attrs-${i}`}
+                    aria-pressed={selected === r.name}
+                    onKeyDown={(e) => onKey(e, () => choose(r.name))}
+                  >
+                    <desc id={`${id}-attrs-${i}`}>
+                      {r.columns
+                        .map(
+                          (c) =>
+                            `${c.name}${c.pk ? " PK" : ""}${c.fk ? ` FK ${c.fk}` : ""}`,
+                        )
+                        .join(", ")}
+                    </desc>
+                    <rect width="290" height="180" rx="12" />
+                    <text className="db-entity-title" x="16" y="28">
+                      {r.name}
+                    </text>
+                  </g>
                   {r.columns.slice(0, 5).map((c, j) => (
                     <text
                       key={c.name}

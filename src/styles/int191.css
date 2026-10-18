@@ -509,7 +509,7 @@
   font-weight: 700;
 }
 .db-entity[data-active="true"] rect,
-.db-entity:focus-visible rect {
+.db-entity:focus-within rect {
   stroke: var(--color-ac-blue);
   stroke-width: 3;
 }
@@ -1232,4 +1232,42 @@
   .db-overview {
     padding: 1rem;
   }
+}
+
+/* Classroom summaries are progressive disclosure, with private source files kept outside the site. */
+.db-classroom-updates {
+  font-size: 0.85rem;
+  border: 0 !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+.db-classroom-updates summary {
+  color: var(--color-ac-blue);
+}
+.db-classroom-updates ul {
+  padding: 0;
+  list-style: none;
+}
+.db-classroom-updates li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.4rem 0;
+}
+.db-classroom-updates time {
+  flex: 0 0 4rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+.db-classroom-updates button {
+  border: 0;
+  background: transparent;
+  font-size: 0.85rem;
+}
+.db-classroom-note {
+  font-size: 0.9rem;
+  margin-block: 1rem;
+}
+.db-classroom-source {
+  color: var(--color-muted);
+  display: block;
 }

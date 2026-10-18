@@ -15,6 +15,7 @@ import NormalizationLab from "./NormalizationLab";
 import FDExplorer from "./FDExplorer";
 import ERLab from "./ERLab";
 import RelationshipPreview from "./RelationshipPreview";
+import ClassroomNotes, { ClassroomUpdates } from "./ClassroomNotes";
 import PracticeCard from "./PracticeCard";
 import PracticeMode from "./PracticeMode";
 const SqlPlayground = lazy(() => import("./SqlPlayground"));
@@ -472,6 +473,7 @@ export default function DatabaseAcademy({
                   </button>
                 ))}
               </section>
+              <ClassroomUpdates lang={lang} onOpen={(id) => go("learn", id)} />
               <div className="db-dashboard-columns">
                 <section className="db-review-panel">
                   <h3>{t("ควรกลับมาทบทวน", "Review queue")}</h3>
@@ -602,6 +604,7 @@ export default function DatabaseAcademy({
               </p>
               <h4>{t("ทำความเข้าใจก่อน", "Understand the concept")}</h4>
               <p>{topic.explanation[lang]}</p>
+              <ClassroomNotes topic={topic.id} lang={lang} />
               <h4>{t("ลองดูด้วยตัวเอง", "Explore the example")}</h4>
               <p>{topic.why[lang]}</p>
               {topic.lab === "normalization" ? (

@@ -13,6 +13,8 @@ Standalone deployment of the INT191 learning module, reusing the existing Astro 
 
 The independent INT191 interface includes a focused resume panel, direct laboratory shortcuts, an ordered learning path and collapsible mobile curriculum. Visual and product principles are documented in `DESIGN.md` and `PRODUCT.md`.
 
+Classroom summaries from 8 and 15 October 2026 add key-selection advice, BCNF checks, an interactive RIDER/ZONE decomposition, requirements-to-constraints guidance and EER subclass distinctions. These are paraphrases; raw transcripts stay outside this public repository.
+
 ## Development
 
 Node 24 LTS recommended.
