@@ -1,0 +1,101 @@
+/* Shared rounded theme. Status colours stay semantic; navigation and diagrams use the selected accent. */
+@font-face {
+  font-family: "LINE Seed Sans TH";
+  src: url("../assets/fonts/line-seed-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "LINE Seed Sans TH";
+  src: url("../assets/fonts/line-seed-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600 900;
+  font-display: swap;
+}
+:root {
+  color-scheme: light;
+  --font-sans: "LINE Seed Sans TH", system-ui, sans-serif;
+  --radius-card: 26px;
+  --color-page: #f6f7f9;
+  --color-surface: #fff;
+  --color-surface-2: #eff1f5;
+  --color-ink: #272b34;
+  --color-ink-2: #4c5361;
+  --color-muted: #69717e;
+  --color-border: #e4e7ed;
+  --color-border-2: #cdd2dd;
+  --color-ac-blue: #71558e;
+  --color-ac-violet: var(--color-ac-blue);
+  --accent-soft: #eee8f6;
+  --accent-button: #e3d8ef;
+  --accent-button-ink: #453356;
+  --practice-current: #6845a0;
+  --practice-info: #216d9c;
+  --practice-success: #246c48;
+  --practice-hint: #895d1b;
+  --practice-error: #ae3c44;
+}
+:root[data-theme="sage"] {
+  --color-ac-blue: #416c53;
+  --accent-soft: #e8f1eb;
+  --accent-button: #dcece2;
+  --accent-button-ink: #294737;
+}
+:root[data-theme="mono"] {
+  --color-ac-blue: #525b6b;
+  --accent-soft: #eceef2;
+  --accent-button: #e1e4e8;
+  --accent-button-ink: #30343c;
+}
+:root[data-mode="dark"] {
+  color-scheme: dark;
+  --color-page: #17191d;
+  --color-surface: #22252b;
+  --color-surface-2: #2c3038;
+  --color-ink: #e9ebf0;
+  --color-ink-2: #ccd1db;
+  --color-muted: #b0b8c6;
+  --color-border: #353a44;
+  --color-border-2: #596170;
+  --color-ac-blue: #d5bdf0;
+  --color-ac-mint: #99ccac;
+  --color-ac-amber: #e6c484;
+  --color-ac-rose: #f3a6ac;
+  --color-ac-cyan: #9acfd7;
+  --accent-soft: #343045;
+  --accent-button: #dfd5f1;
+  --accent-button-ink: #30253f;
+  --practice-current: #c9adf4;
+  --practice-info: #8fc9ec;
+  --practice-success: #91d8ac;
+  --practice-hint: #f0ca82;
+  --practice-error: #f3a0a5;
+}
+:root[data-mode="dark"][data-theme="sage"] {
+  --color-ac-blue: #b7d9c5;
+  --accent-soft: #293b34;
+  --accent-button: #c4dfcf;
+  --accent-button-ink: #263d30;
+}
+:root[data-mode="dark"][data-theme="mono"] {
+  --color-ac-blue: #d3d7df;
+  --accent-soft: #30343b;
+  --accent-button: #dce0e6;
+  --accent-button-ink: #292e36;
+}
+body, button, input, select, textarea { font-family: var(--font-sans); }
+pre, code, kbd, samp, textarea[spellcheck="false"] { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+::selection { background: var(--accent-button); color: var(--accent-button-ink); }
+button, select { cursor: pointer; }
+button:disabled, select:disabled { cursor: default; }
+.theme-controls { display:flex; align-items:center; gap:5px; flex-shrink:0; }
+.theme-controls select, .theme-controls button {
+  background:var(--color-surface); border:1px solid var(--color-border);
+  border-radius:999px; color:var(--color-ink-2); font:inherit;
+  font-size:13px; min-height:36px; padding:5px 11px;
+}
+.theme-controls select { max-width:88px; }
+.theme-controls button { display:flex; gap:6px; align-items:center; }
+.theme-controls button:hover { background:var(--accent-soft); color:var(--color-ac-blue); }
+.theme-controls [data-mode-icon] { font-size:18px; line-height:1; }

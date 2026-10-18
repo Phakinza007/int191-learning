@@ -1,0 +1,34 @@
+---
+import DatabaseAcademy from '../components/int191/DatabaseAcademy';
+import ThemeControls from '../components/ThemeControls.astro';
+import '../styles/base.css';
+import '../styles/int191.css';
+---
+<!doctype html>
+<html lang="th">
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="เรียนฐานข้อมูล INT191 แบบลงมือทำ: Normalization, JOB_SHEET, FD, ER Diagram, SQL และแบบฝึกหัด พร้อมภาษาไทยและ English" />
+  <title>INT191 · Interactive Database Lab</title>
+  <script is:inline>
+   (() => {
+    const root = document.documentElement;
+    let mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    let theme = 'lilac';
+    try {
+     const savedMode = localStorage.getItem('int191-mode');
+     const savedTheme = localStorage.getItem('int191-theme');
+     if (savedMode === 'dark' || savedMode === 'light') mode = savedMode;
+     if (['lilac', 'sage', 'mono'].includes(savedTheme)) theme = savedTheme;
+    } catch {}
+    root.dataset.mode = mode;
+    root.dataset.theme = theme;
+   })();
+  </script>
+ </head>
+ <body>
+  <header class="site-bar"><a href={import.meta.env.BASE_URL}>INT191 · Database Lab</a><ThemeControls /></header>
+  <main><DatabaseAcademy initialLang="th" client:load /></main>
+ </body>
+</html>

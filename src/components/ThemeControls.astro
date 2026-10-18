@@ -1,0 +1,58 @@
+---
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+<div class:list={["theme-controls", { "theme-controls--compact": compact }]} aria-label="รูปแบบเว็บ">
+  <select data-theme-select aria-label="เลือกโทนสี">
+    <option value="lilac">Lilac</option>
+    <option value="sage">Sage</option>
+    <option value="mono">Mono</option>
+  </select>
+  <button type="button" data-mode-toggle aria-label="Light / Dark mode" aria-pressed="false">
+    <span data-mode-icon aria-hidden="true">◐</span><span data-mode-label>Dark</span>
+  </button>
+</div>
+<script>
+  const root = document.documentElement;
+  const sync = () => {
+    const dark = root.dataset.mode === 'dark';
+    document.querySelectorAll<HTMLSelectElement>('[data-theme-select]').forEach(select => {
+      select.value = root.dataset.theme ?? 'lilac';
+    });
+    document.querySelectorAll<HTMLButtonElement>('[data-mode-toggle]').forEach(button => {
+      button.setAttribute('aria-pressed', String(dark));
+      button.setAttribute('aria-label', dark ? 'Dark mode: switch to Light' : 'Light mode: switch to Dark');
+      const label = button.querySelector('[data-mode-label]');
+      if (label) label.textContent = dark ? 'Dark' : 'Light';
+    });
+  };
+  const notify = () => { sync(); document.dispatchEvent(new CustomEvent('int191-theme-change')); };
+  document.querySelectorAll<HTMLSelectElement>('[data-theme-select]').forEach(select => {
+    select.addEventListener('change', () => {
+      root.dataset.theme = select.value;
+      try { localStorage.setItem('int191-theme', select.value); } catch {}
+      notify();
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-mode-toggle]').forEach(button => {
+    button.addEventListener('click', () => {
+      root.dataset.mode = root.dataset.mode === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('int191-mode', root.dataset.mode); } catch {}
+      notify();
+    });
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    try { if (localStorage.getItem('int191-mode')) return; } catch {}
+    root.dataset.mode = event.matches ? 'dark' : 'light';
+    notify();
+  });
+  window.addEventListener('storage', event => {
+    if (event.key === 'int191-mode') {
+      root.dataset.mode = event.newValue === 'dark' || event.newValue === 'light' ? event.newValue : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } else if (event.key === 'int191-theme') {
+      root.dataset.theme = ['lilac', 'sage', 'mono'].includes(event.newValue ?? '') ? event.newValue! : 'lilac';
+    } else return;
+    notify();
+  });
+  sync();
+</script>

@@ -1,0 +1,12 @@
+@import "./theme.css";
+* { box-sizing: border-box; }
+html { background: var(--color-page); color: var(--color-ink); line-height: 1.65; }
+body { margin: 0; font-family: var(--font-sans); }
+a { color: var(--color-ac-blue); text-underline-offset: 3px; }
+button, input, select, textarea { font: inherit; }
+main { max-width: 1540px; padding: 0 1.25rem; margin: auto; }
+.site-bar { max-width: 1540px; margin: auto; padding: 1rem 1.25rem 0; display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+.site-bar > a { font-weight: 700; text-decoration: none; }
+.lang-toggle { display: inline-flex; gap: .25rem; }
+@media (max-width: 600px) { main { padding-inline: .75rem; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
