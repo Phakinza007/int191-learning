@@ -23,7 +23,12 @@ it("uses progressive hints after wrong answers and does not reveal the solution 
   expect(screen.getByText("Hint 1")).toBeTruthy();
   expect(screen.queryByText(q.solution.en)).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Reveal full solution" }));
-  expect(screen.getByText(q.solution.en)).toBeTruthy();
+  expect(
+    screen.getByRole("button", { name: "tuple: One row of a relation." }),
+  ).toBeTruthy();
+  expect(
+    screen.getByRole("button", { name: /attribute: A property or column/ }),
+  ).toBeTruthy();
 });
 it("checks the entire composite key before giving positive feedback", () => {
   render(
