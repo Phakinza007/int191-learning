@@ -2,6 +2,7 @@ import { useState } from "react";
 import { checkAnswer, type Question } from "../../lib/int191/practice";
 import { studentTables, type Lang } from "../../lib/int191/model";
 import SchemaDiagram from "./SchemaDiagram";
+import GlossaryText from "./GlossaryText";
 export default function PracticeCard({
   question: q,
   lang,
@@ -34,7 +35,7 @@ export default function PracticeCard({
       className="db-question"
       aria-label={t("แบบฝึก", "Practice question")}
     >
-      <h3>{q.prompt[lang]}</h3>
+      <h3><GlossaryText text={q.prompt[lang]} lang={lang} /></h3>
       <p>
         {t("ระดับ", "Level")} {q.difficulty}/4 · {q.format}
       </p>
@@ -142,12 +143,12 @@ export default function PracticeCard({
                 "ลองคิดเองก่อน ไม่จำเป็นต้องตอบเร็ว",
                 "Think it through before requesting the solution.",
               )}{" "}
-        {(correct || revealed) && <p>{q.solution[lang]}</p>}
+        {(correct || revealed) && <p><GlossaryText text={q.solution[lang]} lang={lang} /></p>}
       </div>
       {!correct &&
         q.hints.slice(0, hints).map((h, i) => (
           <p className="db-hint" key={i}>
-            <strong>Hint {i + 1}</strong> · {h[lang]}
+            <strong>Hint {i + 1}</strong> · <GlossaryText text={h[lang]} lang={lang} />
           </p>
         ))}
     </section>

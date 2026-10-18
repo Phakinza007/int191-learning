@@ -7,6 +7,7 @@ import {
 } from "../../lib/int191/model";
 import SchemaDiagram from "./SchemaDiagram";
 import DatabaseTable, { type Selection } from "./DatabaseTable";
+import GlossaryText from "./GlossaryText";
 const weak: Relation[] = [
   {
     name: "ORDER",
@@ -84,8 +85,7 @@ export default function ERLab({
           <option value="weak">Weak entity · ORDER_LINE</option>
         </select>
       </label>
-      <p>
-        {example === "student"
+      <p><GlossaryText lang={lang} text={example === "student"
           ? t(
               "DEPARTMENT หนึ่งแผนกมีนักศึกษา 0..N คน STUDENT เก็บ FK departmentId ที่เป็น NULL ได้ นักศึกษาจึงอาจยังไม่มีแผนก PK ระบุนักศึกษา ส่วน FK อ้างแผนก ทั้งสองทำคนละหน้าที่",
               "A department has 0..N students. STUDENT has nullable departmentId, so a student may have no department. The PK identifies the student; the FK references the department.",
@@ -103,12 +103,11 @@ export default function ERLab({
               : t(
                   "lineNo เป็น partial key ซ้ำข้าม order ได้ ต้องรวม owner key orderId จึงระบุ ORDER_LINE ได้ ความสัมพันธ์แบบ identifying นี้ต่างจาก entity อิสระที่มี FK ธรรมดา",
                   "lineNo is a partial key that may repeat across orders. It needs owner key orderId to identify ORDER_LINE. This identifying relationship differs from an independent entity with an ordinary FK.",
-                )}
-      </p>
+              )} /></p>
       <SchemaDiagram key={example} relations={relations} lang={lang} />
       <section className="db-eer-lab" aria-labelledby="db-eer-title">
         <h3 id="db-eer-title">{t("EER · Superclass และ Subclass", "EER · Superclass and subclasses")}</h3>
-        <p>{t("ตัวอย่าง requirement: ACCOUNT อาจเป็น CREATOR, PREMIUM, ทั้งสองแบบ หรือไม่เป็นทั้งคู่ เลือกข้อจำกัดสองแกนแล้วดูความหมาย", "Example requirement: an ACCOUNT may be CREATOR, PREMIUM, both, or neither. Choose each independent constraint and inspect the meaning.")}</p>
+        <p><GlossaryText lang={lang} text={t("ตัวอย่าง requirement: ACCOUNT อาจเป็น CREATOR, PREMIUM, ทั้งสองแบบ หรือไม่เป็นทั้งคู่ เลือกข้อจำกัดสองแกนแล้วดูความหมาย", "Example requirement: an ACCOUNT may be CREATOR, PREMIUM, both, or neither. Choose each independent constraint and inspect the meaning.")} /></p>
         <div className="db-eer-controls">
           <fieldset>
             <legend>{t("สมาชิกหลาย subclass", "Subclass membership")}</legend>
@@ -126,12 +125,11 @@ export default function ERLab({
           <span aria-hidden="true">↓ {overlapping ? "o" : "d"} · {total ? "total" : "partial"} ↓</span>
           <div><strong>CREATOR</strong><strong>PREMIUM</strong></div>
         </div>
-        <p className="db-feedback" aria-live="polite">{overlapping
+        <p className="db-feedback" aria-live="polite"><GlossaryText lang={lang} text={`${overlapping
           ? t("Overlapping: account เดียวอยู่ได้ทั้งสอง subclass", "Overlapping: one account may belong to both subclasses")
-          : t("Disjoint: account หนึ่งอยู่ได้ไม่เกินหนึ่ง subclass", "Disjoint: an account belongs to at most one subclass")}
-          {" · "}{total
+          : t("Disjoint: account หนึ่งอยู่ได้ไม่เกินหนึ่ง subclass", "Disjoint: an account belongs to at most one subclass")} · ${total
             ? t("Total: ทุก account ต้องอยู่ในอย่างน้อยหนึ่ง subclass", "Total: every account must belong to at least one subclass")
-            : t("Partial: account อาจไม่อยู่ใน subclass ใดเลย", "Partial: an account may belong to neither subclass")}</p>
+            : t("Partial: account อาจไม่อยู่ใน subclass ใดเลย", "Partial: an account may belong to neither subclass")}`} /></p>
       </section>
       <div className="db-paired-tables">
         {relations.map((r) => (

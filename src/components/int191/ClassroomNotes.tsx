@@ -7,6 +7,7 @@ import {
 import type { Lang } from "../../lib/int191/model";
 import DatabaseTable, { type Selection } from "./DatabaseTable";
 import SchemaDiagram from "./SchemaDiagram";
+import GlossaryText from "./GlossaryText";
 
 export function ClassroomUpdates({
   lang,
@@ -68,7 +69,7 @@ export default function ClassroomNotes({
               {t("จากคาบเรียน", "From class")} ·{" "}
               <time dateTime={note.date}>{note.date}</time> · {note.title[lang]}
             </summary>
-            <p>{note.explanation[lang]}</p>
+            <p><GlossaryText text={note.explanation[lang]} lang={lang} /></p>
             {note.id === "rider-zone" && (
               <>
                 <p>
@@ -111,10 +112,10 @@ export default function ClassroomNotes({
                 {after && (
                   <>
                     <p>
-                      {t(
+                      <GlossaryText lang={lang} text={t(
                         "แยกแบบ lossless: attribute ร่วมคือ zoneId และ zoneId เป็น key ของ ZONE; FD ทั้งสองตรวจได้ภายในตารางของตัวเอง และทั้งสองตารางผ่าน BCNF ตาม FD ที่กำหนด",
                         "Lossless: the shared attribute zoneId is a key of ZONE. Both FDs are locally preserved, and both relations satisfy BCNF under the stated dependencies.",
-                      )}
+                      )} />
                     </p>
                     <SchemaDiagram relations={riderNormalized} lang={lang} />
                   </>

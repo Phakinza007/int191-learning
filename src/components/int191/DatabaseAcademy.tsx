@@ -18,6 +18,7 @@ import RelationshipPreview from "./RelationshipPreview";
 import ClassroomNotes, { ClassroomUpdates } from "./ClassroomNotes";
 import PracticeCard from "./PracticeCard";
 import PracticeMode from "./PracticeMode";
+import GlossaryText from "./GlossaryText";
 const SqlPlayground = lazy(() => import("./SqlPlayground"));
 type Section =
   | "dashboard"
@@ -613,10 +614,10 @@ export default function DatabaseAcademy({
                 · {topic.objective[lang]}
               </p>
               <h4>{t("ทำความเข้าใจก่อน", "Understand the concept")}</h4>
-              <p>{topic.explanation[lang]}</p>
+              <p><GlossaryText text={topic.explanation[lang]} lang={lang} /></p>
               <ClassroomNotes topic={topic.id} lang={lang} />
               <h4>{t("ลองดูด้วยตัวเอง", "Explore the example")}</h4>
-              <p>{topic.why[lang]}</p>
+              <p><GlossaryText text={topic.why[lang]} lang={lang} /></p>
               {topic.lab === "normalization" ? (
                 <NormalizationLab
                   key={topic.id}
@@ -645,7 +646,7 @@ export default function DatabaseAcademy({
                 <summary>
                   {t("ข้อผิดพลาดที่พบบ่อย", "Common misconception")}
                 </summary>
-                <p>{topic.mistake[lang]}</p>
+                <p><GlossaryText text={topic.mistake[lang]} lang={lang} /></p>
               </details>
               <h4>{t("ตรวจความเข้าใจ", "Check understanding")}</h4>
               <PracticeCard
@@ -659,7 +660,7 @@ export default function DatabaseAcademy({
               <details>
                 <summary>{t("สรุปสั้น ๆ", "Quick summary")}</summary>
                 <p>
-                  {topic.objective[lang]} · {topic.explanation[lang]}
+                  <GlossaryText text={`${topic.objective[lang]} · ${topic.explanation[lang]}`} lang={lang} />
                 </p>
               </details>
               <div className="db-toolbar">

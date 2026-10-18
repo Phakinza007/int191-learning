@@ -15,6 +15,7 @@ import {
 import { stages } from "../../lib/int191/curriculum";
 import DatabaseTable, { type Selection } from "./DatabaseTable";
 import SchemaDiagram from "./SchemaDiagram";
+import GlossaryText from "./GlossaryText";
 const unf: Relation = {
   name: "JOB_SHEET_UNF",
   columns: [
@@ -130,7 +131,7 @@ export default function NormalizationLab({
           </li>
         ))}
       </ol>
-      <h3>{stages[step].action[lang]}</h3>
+      <h3><GlossaryText text={stages[step].action[lang]} lang={lang} /></h3>
       <div className="db-transform">
         <div>
           <h4>{t("ก่อนเปลี่ยน", "Before")}</h4>
@@ -147,7 +148,7 @@ export default function NormalizationLab({
         </div>
         <div className="db-reason">
           <h4>{t("เหตุผลของการเปลี่ยน", "Why this step")}</h4>
-          <p>{stages[step].reason[lang]}</p>
+          <p><GlossaryText text={stages[step].reason[lang]} lang={lang} /></p>
           <div className="db-fd-list">
             {jobFDs.map((f) => (
               <button
@@ -222,7 +223,7 @@ export default function NormalizationLab({
             "Why does this satisfy the normal form?",
           )}
         </strong>{" "}
-        {stages[step].proof[lang]}
+        <GlossaryText text={stages[step].proof[lang]} lang={lang} />
       </p>
       {step >= 2 && (
         <>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DatabaseTable, { type Selection } from "./DatabaseTable";
+import GlossaryText from "./GlossaryText";
 import {
   bcnfFDs,
   candidateKeys,
@@ -59,15 +60,11 @@ export default function FDExplorer({ lang }: { lang: Lang }) {
   };
   return (
     <section>
-      <h2>
-        {t("Functional Dependency Explorer", "Functional dependency explorer")}
-      </h2>
-      <p>
-        {t(
-          "เลือก attributes ฝั่งตั้งต้น แล้วใช้เฉพาะ FD ที่รู้ค่าทางซ้ายครบ คำนวณจากกฎ ไม่เดาจากข้อมูลตัวอย่าง",
-          "Select starting attributes. Apply only FDs whose entire left side is known. Compute from rules rather than guessing from sample records.",
-        )}
-      </p>
+      <h2><GlossaryText text={t("Functional Dependency Explorer", "Functional dependency explorer")} lang={lang} /></h2>
+      <p><GlossaryText lang={lang} text={t(
+        "เลือก attributes ฝั่งตั้งต้น แล้วใช้เฉพาะ FD ที่รู้ค่าทางซ้ายครบ คำนวณจากกฎ ไม่เดาจากข้อมูลตัวอย่าง",
+        "Select starting attributes. Apply only FDs whose entire left side is known. Compute from rules rather than guessing from sample records.",
+      )} /></p>
       <label>
         {t("ตัวอย่าง", "Example")}{" "}
         <select value={example} onChange={(e) => change(e.target.value)}>
@@ -150,6 +147,7 @@ export default function FDExplorer({ lang }: { lang: Lang }) {
           ))}
         </svg>
       </div>
+      <h3><GlossaryText text={t("Attribute Closure (X+)", "Attribute Closure (X+)")} lang={lang} /></h3>
       <p className="db-closure" aria-live="polite">
         <code>{`{${seed.join(", ")}}+ = {${known.join(", ")}}`}</code>
       </p>
@@ -186,7 +184,7 @@ export default function FDExplorer({ lang }: { lang: Lang }) {
       </div>
       {step >= trace.steps.length && (
         <p role="status">
-          {superkey
+          <GlossaryText lang={lang} text={superkey
             ? minimal
               ? t(
                   "ครบทุก attribute และตัดตัวใดออกไม่ได้ จึงเป็น Candidate Key",
@@ -199,7 +197,7 @@ export default function FDExplorer({ lang }: { lang: Lang }) {
             : t(
                 "ยังไม่เป็น Superkey เพราะ closure ไม่ครบทุก attribute",
                 "Not a superkey: the closure does not cover every attribute.",
-              )}
+              )} />
         </p>
       )}
       <h3>
@@ -214,12 +212,10 @@ export default function FDExplorer({ lang }: { lang: Lang }) {
         selection={selection}
         onSelect={setSelection}
       />
-      <p>
-        {t(
-          "ข้อมูลชุดนี้ช่วยตรวจตัวอย่าง แต่การไม่พบแถวขัดแย้งไม่ใช่หลักฐานว่า FD เป็นจริงในทุกสถานะ",
-          "These records illustrate the rules. Not finding a counterexample in a sample does not establish an FD for every valid instance.",
-        )}
-      </p>
+      <p><GlossaryText lang={lang} text={t(
+        "ข้อมูลชุดนี้ช่วยตรวจตัวอย่าง แต่การไม่พบแถวขัดแย้งไม่ใช่หลักฐานว่า FD เป็นจริงในทุกสถานะ",
+        "These records illustrate the rules. Not finding a counterexample in a sample does not establish an FD for every valid instance.",
+      )} /></p>
       <button
         type="button"
         aria-expanded={reveal}
@@ -231,10 +227,10 @@ export default function FDExplorer({ lang }: { lang: Lang }) {
         <div className="db-feedback">
           <p>{keys.map((k) => `{${k.join(", ")}}`).join(" · ")}</p>
           <p>
-            {t(
+            <GlossaryText lang={lang} text={t(
               "แต่ละชุดมี closure ครบ relation และไม่มี proper subset ใดที่เป็น superkey ลองเลือกชุดที่ตัดออกหนึ่งตัวเพื่อพิสูจน์ด้วยตัวเอง",
               "Each set covers the relation, and none of its proper subsets is a superkey. Select a key minus one attribute to verify minimality yourself.",
-            )}
+            )} />
           </p>
         </div>
       )}
