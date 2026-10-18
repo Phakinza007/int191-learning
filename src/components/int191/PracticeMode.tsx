@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { topics } from "../../lib/int191/curriculum";
+import { examTopicIds, topics } from "../../lib/int191/curriculum";
 import { questions } from "../../lib/int191/practice";
 import { type Lang } from "../../lib/int191/model";
 import { dueQuestionIds, type Attempt } from "../../lib/int191/progress";
@@ -43,6 +43,7 @@ export default function PracticeMode({
   );
   const eligible = questions.filter(
     (q) =>
+      examTopicIds.includes(q.topic) &&
       (topic === "all" || q.topic === topic) &&
       (difficulty === "all" || q.difficulty === Number(difficulty)) &&
       (!review || reviewIds.includes(q.id)),
@@ -75,23 +76,32 @@ export default function PracticeMode({
     setSession((s) => s + 1);
   };
   function start() {
-    const order = [
-      "keys",
+    const examPriorityIds = [
+      "fk",
+      "account-eer",
+      "key",
       "closure",
-      "2nf",
-      "3nf",
-      "bcnf",
-      "erd",
-      "sql",
-      "fundamentals",
-      "fd",
-      "candidate",
       "unf",
-      "1nf",
+      "partial",
+      "transitive",
+      "bcnf",
     ];
-    const mixed = order.flatMap((topic) =>
-      eligible.filter((q) => q.topic === topic).slice(0, 1),
-    );
+    const mixed = exam
+      ? examPriorityIds.flatMap((id) => eligible.filter((q) => q.id === id))
+      : [
+          "keys",
+          "closure",
+          "2nf",
+          "3nf",
+          "bcnf",
+          "erd",
+          "sql",
+          "fundamentals",
+          "fd",
+          "candidate",
+          "unf",
+          "1nf",
+        ].flatMap((topic) => eligible.filter((q) => q.topic === topic).slice(0, 1));
     const ids = [...mixed, ...eligible.filter((q) => !mixed.includes(q))]
       .slice(0, 8)
       .map((q) => q.id);
@@ -135,7 +145,7 @@ export default function PracticeMode({
               }}
             >
               <option value="all">{t("ผสมทุกหัวข้อ", "Mixed topics")}</option>
-              {topics.map((t) => (
+              {topics.filter((t) => examTopicIds.includes(t.id)).map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.title[lang]}
                 </option>

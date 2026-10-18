@@ -9,6 +9,20 @@ export type Topic = {
   lab: "normalization" | "fd" | "er" | "sql";
   question: string;
 };
+/** Topics explicitly relevant to the announced INT191 Exam 2 scope. */
+export const examTopicIds: readonly string[] = [
+  "fundamentals",
+  "keys",
+  "fd",
+  "closure",
+  "candidate",
+  "unf",
+  "1nf",
+  "2nf",
+  "3nf",
+  "bcnf",
+  "erd",
+] as const;
 export const topics: Topic[] = [
   {
     id: "fundamentals",

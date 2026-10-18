@@ -11,6 +11,11 @@ export type Question = {
   solution: Copy;
 };
 const englishHints: Record<string, string[]> = {
+  "account-eer": [
+    "Decide whether one ACCOUNT can belong to both subclasses.",
+    "Decide separately whether every ACCOUNT must belong to at least one subclass.",
+    "The requirement allows both and neither.",
+  ],
   relation: [
     "Distinguish a row from a column.",
     "An attribute is a column.",
@@ -346,6 +351,25 @@ export const questions: Question[] = [
     [
       "ไม่ต้องแยก ผล 3NF นี้ผ่าน BCNF อยู่แล้วตาม FD ที่ให้",
       "No. This 3NF result already satisfies BCNF under the stated FDs.",
+    ],
+  ),
+  q(
+    "account-eer",
+    "erd",
+    3,
+    "choice",
+    "ACCOUNT อาจเป็น CREATOR และ PREMIUM พร้อมกัน หรือไม่เป็นทั้งคู่ได้ ข้อจำกัด EER คืออะไร?",
+    "An ACCOUNT may be both CREATOR and PREMIUM, or neither. Which EER constraints apply?",
+    ["Overlapping, partial"],
+    ["Disjoint, total", "Overlapping, total", "Disjoint, partial", "Overlapping, partial"],
+    [
+      "แยกคำถามว่าเป็นสอง subclass พร้อมกันได้ไหม",
+      "จากนั้นถามว่าทุก account ต้องอยู่ใน subclass อย่างน้อยหนึ่งหรือไม่",
+      "Requirement อนุญาตทั้งกรณีทั้งสองแบบและไม่เป็นทั้งคู่",
+    ],
+    [
+      "เป็น overlapping เพราะอยู่สอง subclass พร้อมกันได้ และเป็น partial เพราะไม่อยู่ใน subclass ใดเลยก็ได้",
+      "It is overlapping because an account may belong to both subclasses, and partial because it may belong to neither.",
     ],
   ),
   q(

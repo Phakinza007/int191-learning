@@ -49,6 +49,8 @@ export default function ERLab({
   onPractice: () => void;
 }) {
   const [example, setExample] = useState("student");
+  const [overlapping, setOverlapping] = useState(true);
+  const [total, setTotal] = useState(false);
   const [selection, setSelection] = useState<Selection>(null);
   const t = (th: string, en: string) => (lang === "th" ? th : en);
   const relations =
@@ -104,6 +106,33 @@ export default function ERLab({
                 )}
       </p>
       <SchemaDiagram key={example} relations={relations} lang={lang} />
+      <section className="db-eer-lab" aria-labelledby="db-eer-title">
+        <h3 id="db-eer-title">{t("EER · Superclass และ Subclass", "EER · Superclass and subclasses")}</h3>
+        <p>{t("ตัวอย่าง requirement: ACCOUNT อาจเป็น CREATOR, PREMIUM, ทั้งสองแบบ หรือไม่เป็นทั้งคู่ เลือกข้อจำกัดสองแกนแล้วดูความหมาย", "Example requirement: an ACCOUNT may be CREATOR, PREMIUM, both, or neither. Choose each independent constraint and inspect the meaning.")}</p>
+        <div className="db-eer-controls">
+          <fieldset>
+            <legend>{t("สมาชิกหลาย subclass", "Subclass membership")}</legend>
+            <button type="button" aria-pressed={overlapping} onClick={() => setOverlapping(true)}>{t("Overlapping · ซ้ำได้", "Overlapping · may be both")}</button>
+            <button type="button" aria-pressed={!overlapping} onClick={() => setOverlapping(false)}>{t("Disjoint · เป็นพร้อมกันไม่ได้", "Disjoint · cannot be both")}</button>
+          </fieldset>
+          <fieldset>
+            <legend>{t("ต้องเป็น subclass หรือไม่", "Subclass participation")}</legend>
+            <button type="button" aria-pressed={total} onClick={() => setTotal(true)}>{t("Total · ต้องเป็นอย่างน้อยหนึ่ง", "Total · must be at least one")}</button>
+            <button type="button" aria-pressed={!total} onClick={() => setTotal(false)}>{t("Partial · ไม่เป็นก็ได้", "Partial · may be neither")}</button>
+          </fieldset>
+        </div>
+        <div className="db-eer-diagram" role="img" aria-label={t("ACCOUNT superclass แตกไปยัง CREATOR และ PREMIUM subclass", "ACCOUNT superclass specializes into CREATOR and PREMIUM subclasses")}>
+          <strong>ACCOUNT <small>{t("Superclass", "Superclass")}</small></strong>
+          <span aria-hidden="true">↓ {overlapping ? "o" : "d"} · {total ? "total" : "partial"} ↓</span>
+          <div><strong>CREATOR</strong><strong>PREMIUM</strong></div>
+        </div>
+        <p className="db-feedback" aria-live="polite">{overlapping
+          ? t("Overlapping: account เดียวอยู่ได้ทั้งสอง subclass", "Overlapping: one account may belong to both subclasses")
+          : t("Disjoint: account หนึ่งอยู่ได้ไม่เกินหนึ่ง subclass", "Disjoint: an account belongs to at most one subclass")}
+          {" · "}{total
+            ? t("Total: ทุก account ต้องอยู่ในอย่างน้อยหนึ่ง subclass", "Total: every account must belong to at least one subclass")
+            : t("Partial: account อาจไม่อยู่ใน subclass ใดเลย", "Partial: an account may belong to neither subclass")}</p>
+      </section>
       <div className="db-paired-tables">
         {relations.map((r) => (
           <DatabaseTable

@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import LangToggle from "../LangToggle";
 import { LANG_COOKIE, normalizeLang } from "../../lib/note-lang";
-import { glossary, topics } from "../../lib/int191/curriculum";
+import { examTopicIds, glossary, topics } from "../../lib/int191/curriculum";
 import { questions } from "../../lib/int191/practice";
 import {
   STORAGE_KEY,
@@ -35,10 +35,8 @@ const sections: Section[] = [
   "normalization",
   "fd",
   "er",
-  "sql",
   "practice",
   "exam",
-  "glossary",
 ];
 export default function DatabaseAcademy({
   initialLang = "th",
@@ -57,18 +55,22 @@ export default function DatabaseAcademy({
   const [flip, setFlip] = useState(false);
   const [card, setCard] = useState(0);
   const t = (th: string, en: string) => (lang === "th" ? th : en);
-  const topic = topics.find((x) => x.id === topicId) ?? topics[0];
-  const topicIndex = topics.indexOf(topic);
-  const currentTopic =
-    topics.find((x) => x.id === progress.current) ?? topics[0];
-  const due = dueQuestionIds(progress.attempts);
+  const examTopics = topics.filter((x) => examTopicIds.includes(x.id));
+  const inExamScope = (id: string) => examTopicIds.includes(id);
+  const topic = examTopics.find((x) => x.id === topicId) ?? examTopics[0];
+  const topicIndex = examTopics.indexOf(topic);
+  const currentTopic = examTopics.find((x) => x.id === progress.current) ?? examTopics[0];
+  const due = dueQuestionIds(progress.attempts).filter((id) =>
+    questions.some((q) => q.id === id && inExamScope(q.topic)),
+  );
   const latest = new Map(progress.attempts.map((a) => [a.id, a]));
   const mastered = [...latest.values()].filter(
-    (a) => a.correct && !a.revealed,
+    (a) => a.correct && !a.revealed && questions.some((q) => q.id === a.id && inExamScope(q.topic)),
   ).length;
+  const scopedActivity = progress.activity.filter((a) => inExamScope(a.label));
   const nextTopic =
-    topics.find((x) => !progress.completed.includes(x.id)) ?? topics[0];
-  const visibleTopics = topics.filter((x) =>
+    examTopics.find((x) => !progress.completed.includes(x.id)) ?? examTopics[0];
+  const visibleTopics = examTopics.filter((x) =>
     `${x.title.th} ${x.title.en} ${x.explanation.th} ${x.explanation.en}`
       .toLowerCase()
       .includes(search.toLowerCase()),
@@ -96,7 +98,7 @@ export default function DatabaseAcademy({
     const route = () => {
       const [a, b] = window.location.hash.slice(1).split("/");
       if (sections.includes(a as Section)) setSection(a as Section);
-      if (topics.some((x) => x.id === b)) {
+      if (examTopicIds.includes(b)) {
         setTopicId(b);
         if (a === "learn") setProgress((p) => ({ ...p, current: b }));
       }
@@ -190,14 +192,14 @@ export default function DatabaseAcademy({
         <div>
           <h1>
             {t(
-              "เข้าใจฐานข้อมูล ผ่านการลงมือทำ",
-              "Understand databases by doing",
+          "เตรียมสอบ INT191 · ครั้งที่ 2",
+              "INT191 · Exam 2 preparation",
             )}
           </h1>
           <p>
             {t(
-              "เริ่มจากความเข้าใจ ไปให้ถึงการออกแบบด้วยตัวเอง",
-              "From understanding a table to designing a database.",
+              "รวมเฉพาะเนื้อหาตามประกาศสอบ พร้อมตัวอย่างและแบบฝึก",
+              "Focused lessons, examples, and practice from the exam announcement.",
             )}
           </p>
         </div>
@@ -246,7 +248,7 @@ export default function DatabaseAcademy({
             key={s}
             aria-current={
               (s === "normalization" &&
-                ["normalization", "fd", "er", "sql"].includes(section)) ||
+                ["normalization", "fd", "er"].includes(section)) ||
               section === s
                 ? "page"
                 : undefined
@@ -269,7 +271,7 @@ export default function DatabaseAcademy({
             <span>
               {t("สารบัญบทเรียน", "Course contents")}{" "}
               <small>
-                {topics.length} {t("บท", "topics")}
+                {examTopics.length} {t("บทที่ออกสอบ", "exam topics")}
               </small>
             </span>
             <span aria-hidden="true">{topicsOpen ? "−" : "+"}</span>
@@ -277,7 +279,7 @@ export default function DatabaseAcademy({
           <div className="db-topic-content" id="db-topic-panel">
             <p className="db-rail-heading">
               {t("สารบัญบทเรียน", "Course contents")}{" "}
-              <span>{topics.length}</span>
+              <span>{examTopics.length}</span>
             </p>
             <label htmlFor="db-topic-search">
               {t("ค้นหาหัวข้อ INT191", "Search INT191 topics")}
@@ -307,7 +309,7 @@ export default function DatabaseAcademy({
                   onClick={() => go("learn", x.id)}
                 >
                   <span className="db-topic-number" aria-hidden="true">
-                    {String(topics.indexOf(x) + 1).padStart(2, "0")}
+                    {String(examTopics.indexOf(x) + 1).padStart(2, "0")}
                   </span>
                   <span>{x.title[lang]}</span>
                   <small>
@@ -328,9 +330,6 @@ export default function DatabaseAcademy({
                 )}
               </p>
             )}
-            <button type="button" onClick={() => go("glossary")}>
-              {labels.glossary}
-            </button>
             <a href={import.meta.env.BASE_URL}>
               {t("กลับหน้าหลัก", "Back to home")}
             </a>
@@ -343,12 +342,12 @@ export default function DatabaseAcademy({
           <h2 id="db-content-title" tabIndex={-1} className="db-section-title">
             {labels[section]}
           </h2>
-          {["normalization", "fd", "er", "sql"].includes(section) && (
+          {["normalization", "fd", "er"].includes(section) && (
             <nav
               className="db-lab-nav"
               aria-label={t("เลือกห้องทดลอง", "Choose a laboratory")}
             >
-              {(["normalization", "fd", "er", "sql"] as Section[]).map((s) => (
+              {(["normalization", "fd", "er"] as Section[]).map((s) => (
                 <button
                   type="button"
                   key={s}
@@ -362,6 +361,25 @@ export default function DatabaseAcademy({
           )}
           {section === "dashboard" && (
             <>
+              <section className="db-exam-brief" aria-labelledby="db-exam-brief-title">
+                <div className="db-exam-brief-heading">
+                  <div>
+                    <p className="db-exam-kicker">{t("ประกาศสอบครั้งที่ 2 · 1/2569", "Exam 2 announcement · 1/2569")}</p>
+                    <h3 id="db-exam-brief-title">{t("สอบวันจันทร์ที่ 19 ตุลาคม 2569", "Monday, 19 October 2026")}</h3>
+                    <p>{t("เวลา 09:30–12:00 · ห้อง LX12/1-2 · ปรนัย 70 ข้อ · 35% ของคะแนนวิชา", "09:30–12:00 · Room LX12/1-2 · 70 multiple-choice questions · 35% of course grade")}</p>
+                    <p>{t("ปิดหนังสือ · ใช้ดินสอ 2B · อนุญาตพจนานุกรมกระดาษทั่วไป 1 เล่ม", "Closed book · Bring a 2B pencil · One standard paper dictionary is allowed")}</p>
+                  </div>
+                  <button className="db-primary-action" type="button" onClick={() => go("exam")}>
+                    {t("เริ่มทบทวน", "Start reviewing")} <span aria-hidden="true">→</span>
+                  </button>
+                </div>
+                <ol className="db-exam-scope">
+                  <li><strong>01 · Logical DB Design</strong><span>{t("แปลง ERD เป็น Relation, วาง PK/FK และความสัมพันธ์ 1:1, 1:N, M:N", "Map ERDs to relations, place PK/FKs, and map 1:1, 1:N, M:N relationships")}</span></li>
+                  <li><strong>02 · Enhanced ER Diagram</strong><span>{t("Superclass / Subclass, Generalization / Specialization, disjoint / overlapping, total / partial", "Superclass/subclass, generalization/specialization, disjoint/overlapping, total/partial")}</span></li>
+                  <li><strong>03 · Normalization</strong><span>{t("Candidate Key, FD, anomalies และ UNF → 1NF → 2NF → 3NF → BCNF", "Candidate keys, FDs, anomalies, and UNF → 1NF → 2NF → 3NF → BCNF")}</span></li>
+                </ol>
+                <small className="db-exam-scope-note">{t("ขอบเขตอิงประกาศสอบอย่างเป็นทางการ ตัวอย่างจากคาบเป็นโจทย์ฝึก ไม่ได้รับรองว่าจะตรงกับข้อสอบ", "Scope follows the official exam notice. Class examples are practice material, not a prediction of exact exam questions.")}</small>
+              </section>
               <section className="db-overview">
                 <div className="db-resume-copy">
                   <h3>{t("กลับมาเรียนต่อ", "Continue learning")}</h3>
@@ -384,7 +402,7 @@ export default function DatabaseAcademy({
                         <button
                           className="db-primary-action"
                           type="button"
-                          onClick={() => go("learn", progress.current)}
+                          onClick={() => go("learn", currentTopic.id)}
                         >
                           {t("เรียนต่อ", "Resume")}{" "}
                           <span aria-hidden="true">→</span>
@@ -400,19 +418,19 @@ export default function DatabaseAcademy({
                       </div>
                       <div className="db-progress-caption">
                         <span>
-                          {progress.completed.length}/{topics.length}{" "}
+                          {examTopics.filter((x) => progress.completed.includes(x.id)).length}/{examTopics.length}{" "}
                           {t("บทเรียนที่เรียนจบ", "lessons completed")}
                         </span>
                         <span>
                           {Math.round(
-                            (progress.completed.length / topics.length) * 100,
+                            (examTopics.filter((x) => progress.completed.includes(x.id)).length / examTopics.length) * 100,
                           )}
                           %
                         </span>
                       </div>
                       <progress
-                        value={progress.completed.length}
-                        max={topics.length}
+                        value={examTopics.filter((x) => progress.completed.includes(x.id)).length}
+                        max={examTopics.length}
                         aria-label={t("ความคืบหน้าบทเรียน", "Lesson progress")}
                       />
                       <p className="db-practice-progress">
@@ -420,7 +438,7 @@ export default function DatabaseAcademy({
                           "แบบฝึกที่ตอบถูกในครั้งล่าสุดโดยไม่เปิดเฉลย",
                           "Latest answers correct without revealing",
                         )}
-                        : {mastered}/{latest.size}
+                        : {mastered}/{[...latest.keys()].filter((id) => questions.some((q) => q.id === id && inExamScope(q.topic))).length}
                       </p>
                     </>
                   )}
@@ -453,14 +471,6 @@ export default function DatabaseAcademy({
                       "er",
                       "1 : N",
                       t("สำรวจความสัมพันธ์", "Explore relationships"),
-                    ],
-                    [
-                      "sql",
-                      "SELECT *",
-                      t(
-                        "ทดลอง query ดูผลลัพธ์",
-                        "Run a query. See the result.",
-                      ),
                     ],
                   ] as const
                 ).map(([id, visual, description]) => (
@@ -511,8 +521,8 @@ export default function DatabaseAcademy({
                 </section>
                 <section>
                   <h3>{t("หัวข้อที่บุ๊กมาร์ก", "Bookmarked topics")}</h3>
-                  {progress.bookmarks.length ? (
-                    progress.bookmarks.map((id) => (
+                  {progress.bookmarks.some(inExamScope) ? (
+                    progress.bookmarks.filter(inExamScope).map((id) => (
                       <button
                         className="db-list-link"
                         type="button"
@@ -531,7 +541,7 @@ export default function DatabaseAcademy({
                     </p>
                   )}
                   <h3>{t("กิจกรรมล่าสุด", "Recent learning")}</h3>
-                  {!progress.activity.length && (
+                  {!scopedActivity.length && (
                     <p className="db-empty-activity">
                       {t(
                         "บทเรียนที่เปิดจะปรากฏที่นี่",
@@ -540,7 +550,7 @@ export default function DatabaseAcademy({
                     </p>
                   )}
                   <ol>
-                    {progress.activity
+                    {scopedActivity
                       .slice()
                       .reverse()
                       .map((a, i) => (
@@ -562,13 +572,13 @@ export default function DatabaseAcademy({
                   <span>{t("เลือกเริ่มได้ทุกบท", "Start with any topic")}</span>
                 </div>
                 <ol className="db-journey">
-                  {topics.map((x) => (
+                  {examTopics.map((x) => (
                     <li key={x.id}>
                       <button type="button" onClick={() => go("learn", x.id)}>
                         <span className="db-journey-number" aria-hidden="true">
                           {progress.completed.includes(x.id)
                             ? "✓"
-                            : String(topics.indexOf(x) + 1).padStart(2, "0")}
+                            : String(examTopics.indexOf(x) + 1).padStart(2, "0")}
                         </span>
                         <span className="db-journey-copy">
                           <strong>{x.title[lang]}</strong>
@@ -670,11 +680,11 @@ export default function DatabaseAcademy({
                 <button
                   type="button"
                   onClick={() =>
-                    go("learn", topics[(topicIndex + 1) % topics.length].id)
+                    go("learn", examTopics[(topicIndex + 1) % examTopics.length].id)
                   }
                 >
                   {t("บทถัดไป", "Next topic")}:{" "}
-                  {topics[(topicIndex + 1) % topics.length].title[lang]}
+                  {examTopics[(topicIndex + 1) % examTopics.length].title[lang]}
                 </button>
               </div>
               {!passed && (
