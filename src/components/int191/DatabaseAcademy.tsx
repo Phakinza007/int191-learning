@@ -19,9 +19,11 @@ import ClassroomNotes, { ClassroomUpdates } from "./ClassroomNotes";
 import PracticeCard from "./PracticeCard";
 import PracticeMode from "./PracticeMode";
 import GlossaryText from "./GlossaryText";
+import ExamWhiteboard from "./ExamWhiteboard";
 const SqlPlayground = lazy(() => import("./SqlPlayground"));
 type Section =
   | "dashboard"
+  | "map"
   | "learn"
   | "normalization"
   | "fd"
@@ -32,6 +34,7 @@ type Section =
   | "glossary";
 const sections: Section[] = [
   "dashboard",
+  "map",
   "learn",
   "normalization",
   "fd",
@@ -169,6 +172,7 @@ export default function DatabaseAcademy({
   const topicQuestion = questions.find((q) => q.id === topic.question)!;
   const labels: Record<Section, string> = {
     dashboard: t("ภาพรวมการเรียน", "Learning dashboard"),
+    map: t("กระดานภาพรวมเนื้อหาสอบ", "Exam whiteboard"),
     learn: t("บทเรียน", "Lessons"),
     normalization: "Normalization Lab",
     fd: "FD Explorer",
@@ -238,6 +242,7 @@ export default function DatabaseAcademy({
         {(
           [
             "dashboard",
+            "map",
             "learn",
             "normalization",
             "practice",
@@ -594,6 +599,9 @@ export default function DatabaseAcademy({
                 </ol>
               </section>
             </>
+          )}
+          {section === "map" && (
+            <ExamWhiteboard lang={lang} onOpenLesson={(id) => go("learn", id)} />
           )}
           {section === "learn" && (
             <article key={topic.id} className="db-lesson">

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from "react";
-import { afterEach, expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import {
   cleanup,
   fireEvent,
@@ -14,6 +14,7 @@ import FDExplorer from "../src/components/int191/FDExplorer";
 import SchemaDiagram from "../src/components/int191/SchemaDiagram";
 import DatabaseTable from "../src/components/int191/DatabaseTable";
 import ERLab from "../src/components/int191/ERLab";
+import ExamWhiteboard from "../src/components/int191/ExamWhiteboard";
 import { jobFinal, studentTables } from "../src/lib/int191/model";
 afterEach(cleanup);
 it("uses progressive hints after wrong answers and does not reveal the solution until requested", () => {
@@ -101,4 +102,15 @@ it("renders EER specialization constraints as a diagram and explains table mappi
   fireEvent.click(screen.getByRole("button", { name: /Total/ }));
   expect(screen.getByText("d", { selector: "text" })).toBeTruthy();
   expect(screen.getByText(/every account must appear in exactly one subclass table/)).toBeTruthy();
+});
+it("connects exam topics on an explorable whiteboard and opens the related lesson", () => {
+  const onOpenLesson = vi.fn();
+  render(<ExamWhiteboard lang="en" onOpenLesson={onOpenLesson} />);
+  expect(screen.getByRole("group", { name: /Connections among INT191 exam topics/ })).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: /Attribute Closure/ }));
+  expect(screen.getByText(/Closure proves whether X is a superkey/)).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+  expect(screen.getByText("110%")).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: "Open related lesson" }));
+  expect(onOpenLesson).toHaveBeenCalledWith("closure");
 });
